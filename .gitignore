@@ -1,0 +1,8 @@
+.DS_Store
+.claude/worktrees/
+.claude/launch.json
+.claude/scheduled_tasks.lock
+.claude/settings.local.json
+node_modules/
+*.log
+.vscode/
