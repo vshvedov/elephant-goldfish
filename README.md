@@ -6,13 +6,17 @@ A reusable workflow for software work with Claude Code, built around the elephan
 
 ---
 
-## Quick start
+## How to install
 
 **In your target repo, open a Claude Code session and paste this message:**
 
 > Fetch the elephant-goldfish bootstrap procedure with
 > `gh api repos/vshvedov/elephant-goldfish/contents/BOOTSTRAP.md -H 'Accept: application/vnd.github.raw'`,
 > then follow the procedure to set up the elephant/goldfish workflow here.
+
+## What you get
+
+Five slash commands installed in `<target>/.claude/commands/` — `/eg-brainstorm`, `/eg-prd`, `/eg-fix-bug`, `/eg-new-feature`, `/eg-precommit-review` — plus a "Working with Claude Code" section appended to your `CLAUDE.md` so any future session knows the commands exist and what each one does.
 
 That's the whole install. Claude reads `BOOTSTRAP.md`, inspects your stack, fetches the five command templates and the CLAUDE.md snippet the same way, customizes them for the detected language and conventions, writes them into `<target>/.claude/commands/`, and updates your `CLAUDE.md`. See [Bootstrap a new repo](#bootstrap-a-new-repo) below for the full procedure.
 
@@ -93,7 +97,7 @@ You give a one-liner; Claude writes the doc back at you. **You don't author docs
 
 ## Bootstrap a new repo
 
-(See the [Quick start](#quick-start) at the top for the one-line invocation.)
+(See [How to install](#how-to-install) at the top for the one-line invocation.)
 
 After you give Claude the `gh api` instruction, Claude will:
 
