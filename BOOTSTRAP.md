@@ -2,6 +2,33 @@
 
 This file is read by Claude Code. The user has pointed you at this repo and asked you to set up the elephant/goldfish workflow in their target repo. Follow these steps.
 
+## How to fetch the rest of this repo's content
+
+This repo is **private**. There is no local working copy on the target machine — you got here by streaming this file's text through `gh api`. Fetch the remaining files (the four command templates and the CLAUDE.md snippet) the same way, on demand, against the `bootstrap` branch:
+
+```sh
+gh api 'repos/vshvedov/elephant-goldfish/contents/<PATH>?ref=bootstrap' -H 'Accept: application/vnd.github.raw'
+```
+
+Files this procedure references later:
+
+- `commands/brainstorm.md`
+- `commands/fix-bug.md`
+- `commands/new-feature.md`
+- `commands/precommit-review.md`
+- `claude-md-snippet.md`
+
+Recommended: fetch them all up front into a tmp dir, then read locally through the rest of the steps:
+
+```sh
+mkdir -p /tmp/elephant-goldfish/commands
+for f in claude-md-snippet.md commands/brainstorm.md commands/fix-bug.md commands/new-feature.md commands/precommit-review.md; do
+  gh api "repos/vshvedov/elephant-goldfish/contents/${f}?ref=bootstrap" -H 'Accept: application/vnd.github.raw' > "/tmp/elephant-goldfish/${f}"
+done
+```
+
+After this, every reference to `commands/<name>.md` or `claude-md-snippet.md` below resolves to `/tmp/elephant-goldfish/<same path>` in your local read.
+
 ## Step 0: Confirm the target
 
 The user invoked you from a working directory that is the target repo. Confirm: print the target's absolute path and ask the user to confirm before doing anything destructive. If the target already has `.claude/commands/{fix-bug,new-feature,precommit-review}.md`, ask whether to overwrite, augment, or abort.
