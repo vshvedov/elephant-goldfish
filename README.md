@@ -10,15 +10,13 @@ In your target repo, in a Claude Code session, paste this:
 
 ```
 Fetch the elephant-goldfish bootstrap procedure with:
-  gh api 'repos/vshvedov/elephant-goldfish/contents/BOOTSTRAP.md?ref=bootstrap' -H 'Accept: application/vnd.github.raw'
+  gh api repos/vshvedov/elephant-goldfish/contents/BOOTSTRAP.md -H 'Accept: application/vnd.github.raw'
 Then follow the procedure to set up the elephant/goldfish workflow here.
 ```
 
-That's it. Claude streams the procedure text directly through your authenticated `gh` CLI, inspects your stack, fetches the four command templates and the CLAUDE.md snippet the same way, customizes them, drops them into `<target>/.claude/commands/`, and updates your `CLAUDE.md`. See [Bootstrap a new repo](#bootstrap-a-new-repo) below for the full procedure.
+That's it. Claude streams the procedure text directly through `gh api`, inspects your stack, fetches the four command templates and the CLAUDE.md snippet the same way, customizes them, drops them into `<target>/.claude/commands/`, and updates your `CLAUDE.md`. See [Bootstrap a new repo](#bootstrap-a-new-repo) below for the full procedure.
 
-> **Why `gh api`, not `git clone`?** The repo is private on purpose. `gh api` uses your authenticated GitHub session, so the templates stay private to you and your machines while still being fetchable from any of your repos. No clone, no working copy, just text.
->
-> **Why `?ref=bootstrap`, not `main`?** `main` is the development branch — edits land there freely. The `bootstrap` branch is the stable pin: target repos always consume from it, and you fast-forward `bootstrap` to `main` when you're ready to bless a new version. To bless a release: `git push origin main:bootstrap`.
+> **Why `gh api`, not `git clone`?** No working copy left lying around — just text streamed in, customized, and written into the target. Cleaner than clone for a one-shot setup.
 
 ---
 

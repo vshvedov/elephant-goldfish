@@ -4,10 +4,10 @@ This file is read by Claude Code. The user has pointed you at this repo and aske
 
 ## How to fetch the rest of this repo's content
 
-This repo is **private**. There is no local working copy on the target machine — you got here by streaming this file's text through `gh api`. Fetch the remaining files (the four command templates and the CLAUDE.md snippet) the same way, on demand, against the `bootstrap` branch:
+There is no local working copy on the target machine — you got here by streaming this file's text through `gh api`. Fetch the remaining files (the four command templates and the CLAUDE.md snippet) the same way, on demand:
 
 ```sh
-gh api 'repos/vshvedov/elephant-goldfish/contents/<PATH>?ref=bootstrap' -H 'Accept: application/vnd.github.raw'
+gh api repos/vshvedov/elephant-goldfish/contents/<PATH> -H 'Accept: application/vnd.github.raw'
 ```
 
 Files this procedure references later:
@@ -23,7 +23,7 @@ Recommended: fetch them all up front into a tmp dir, then read locally through t
 ```sh
 mkdir -p /tmp/elephant-goldfish/commands
 for f in claude-md-snippet.md commands/brainstorm.md commands/fix-bug.md commands/new-feature.md commands/precommit-review.md; do
-  gh api "repos/vshvedov/elephant-goldfish/contents/${f}?ref=bootstrap" -H 'Accept: application/vnd.github.raw' > "/tmp/elephant-goldfish/${f}"
+  gh api "repos/vshvedov/elephant-goldfish/contents/${f}" -H 'Accept: application/vnd.github.raw' > "/tmp/elephant-goldfish/${f}"
 done
 ```
 
