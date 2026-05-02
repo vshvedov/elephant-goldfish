@@ -12,18 +12,18 @@ gh api repos/vshvedov/elephant-goldfish/contents/<PATH> -H 'Accept: application/
 
 Files this procedure references later:
 
-- `commands/brainstorm.md`
+- `commands/eg-brainstorm.md`
 - `commands/eg-prd.md`
-- `commands/fix-bug.md`
-- `commands/new-feature.md`
-- `commands/precommit-review.md`
+- `commands/eg-fix-bug.md`
+- `commands/eg-new-feature.md`
+- `commands/eg-precommit-review.md`
 - `claude-md-snippet.md`
 
 Recommended: fetch them all up front into a tmp dir, then read locally through the rest of the steps:
 
 ```sh
 mkdir -p /tmp/elephant-goldfish/commands
-for f in claude-md-snippet.md commands/brainstorm.md commands/eg-prd.md commands/fix-bug.md commands/new-feature.md commands/precommit-review.md; do
+for f in claude-md-snippet.md commands/eg-brainstorm.md commands/eg-prd.md commands/eg-fix-bug.md commands/eg-new-feature.md commands/eg-precommit-review.md; do
   gh api "repos/vshvedov/elephant-goldfish/contents/${f}" -H 'Accept: application/vnd.github.raw' > "/tmp/elephant-goldfish/${f}"
 done
 ```
@@ -32,7 +32,7 @@ After this, every reference to `commands/<name>.md` or `claude-md-snippet.md` be
 
 ## Step 0: Confirm the target
 
-The user invoked you from a working directory that is the target repo. Confirm: print the target's absolute path and ask the user to confirm before doing anything destructive. If the target already has `.claude/commands/{fix-bug,new-feature,precommit-review}.md`, ask whether to overwrite, augment, or abort.
+The user invoked you from a working directory that is the target repo. Confirm: print the target's absolute path and ask the user to confirm before doing anything destructive. If the target already has `.claude/commands/{eg-fix-bug,eg-new-feature,eg-precommit-review}.md`, ask whether to overwrite, augment, or abort.
 
 ## Step 1: Inspect the stack
 
@@ -75,11 +75,11 @@ Print the stack profile to the user and ask them to confirm or correct before ge
 
 ## Step 2: Generate the five commands
 
-Use [commands/fix-bug.md](commands/fix-bug.md), [commands/new-feature.md](commands/new-feature.md), [commands/precommit-review.md](commands/precommit-review.md), [commands/brainstorm.md](commands/brainstorm.md), and [commands/eg-prd.md](commands/eg-prd.md) as the skeletons. Substitute every `[BOOTSTRAP: ...]` marker with concrete values from the stack profile.
+Use [commands/eg-fix-bug.md](commands/eg-fix-bug.md), [commands/eg-new-feature.md](commands/eg-new-feature.md), [commands/eg-precommit-review.md](commands/eg-precommit-review.md), [commands/eg-brainstorm.md](commands/eg-brainstorm.md), and [commands/eg-prd.md](commands/eg-prd.md) as the skeletons. Substitute every `[BOOTSTRAP: ...]` marker with concrete values from the stack profile.
 
-`brainstorm.md` and `eg-prd.md` are mostly stack-agnostic by design (they produce concepts and requirements, not code) — each carries one or two `[BOOTSTRAP: ...]` markers for save paths. Pick sensible defaults for the target:
+`eg-brainstorm.md` and `eg-prd.md` are mostly stack-agnostic by design (they produce concepts and requirements, not code) — each carries one or two `[BOOTSTRAP: ...]` markers for save paths. Pick sensible defaults for the target:
 
-- `brainstorm.md` save path: `docs/brainstorms/<slug>-<YYYY-MM-DD>.md` if there's a `docs/` tree, otherwise `notes/brainstorms/...`.
+- `eg-brainstorm.md` save path: `docs/eg-brainstorms/<slug>-<YYYY-MM-DD>.md` if there's a `docs/` tree, otherwise `notes/eg-brainstorms/...`.
 - `eg-prd.md` save path: `docs/prds/<slug>-<YYYY-MM-DD>.md` if there's a `docs/` tree, otherwise `docs/specs/...` or `notes/prds/...`. If the project already has a PRD location (look for `docs/prds/`, `docs/specs/`, `prd/`, or a PRD listed in CLAUDE.md), use that.
 
 Specifically:
@@ -98,14 +98,14 @@ Specifically:
   - **Python web (Django/FastAPI/Flask):** N+1 (`select_related`/`prefetch_related`), CSRF, SQLAlchemy session leaks, async/sync mixing, Pydantic validation drift.
   - **Mobile (general):** background-task lifecycle, memory leaks via retain cycles, app-backgrounded state restoration.
   - Add others as appropriate. Be concrete, not generic.
-- `[BOOTSTRAP: project-specific routing note]` → if the project has a stack-specific verb (e.g. `/new-module`), reference it in `/new-feature.md`'s opening so users know when to switch. Skip if no such verb exists yet.
+- `[BOOTSTRAP: project-specific routing note]` → if the project has a stack-specific verb (e.g. `/eg-new-module`), reference it in `/eg-new-feature.md`'s opening so users know when to switch. Skip if no such verb exists yet. Project-specific commands should also carry the `eg-` prefix to keep the namespace consistent.
 - `[BOOTSTRAP: commit message style note]` → the convention observed in `git log`.
 
 The base "Hunt for" list (universal items: bugs, security, race conditions, edge cases, error handling, performance, test-coverage gaps, dead code) stays as-is. You're appending stack-specific items, not replacing.
 
 ## Step 3: Write the files
 
-Create `<target>/.claude/commands/{brainstorm,eg-prd,fix-bug,new-feature,precommit-review}.md` from the substituted templates. If the directory doesn't exist, create it.
+Create `<target>/.claude/commands/{eg-brainstorm,eg-prd,eg-fix-bug,eg-new-feature,eg-precommit-review}.md` from the substituted templates. If the directory doesn't exist, create it.
 
 ## Step 4: Update CLAUDE.md
 
@@ -128,7 +128,7 @@ Print to the user:
 - Stack profile (confirmed or corrected by user)
 - Files created (with paths)
 - CLAUDE.md change (created or updated, with the section title)
-- Anything you couldn't infer and want the user to fill in (e.g. "no E2E framework detected — `/precommit-review` will skip that tier; tell me if you want it added")
+- Anything you couldn't infer and want the user to fill in (e.g. "no E2E framework detected — `/eg-precommit-review` will skip that tier; tell me if you want it added")
 - Project-specific commands worth considering next (e.g. "this is a Rails app with Sidekiq workers — consider a `/new-worker` if you create them often")
 
 **Stop short of committing.** The user authorizes the commit when ready, following the target's commit convention.

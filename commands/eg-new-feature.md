@@ -129,9 +129,9 @@ Follow the plan. After each layer, briefly verify before moving on:
 
 [BOOTSTRAP: cross-tenant or other always-verify reminder if applicable, e.g. "Multi-tenant verification: log in as a user on a different company and confirm they cannot see/modify the new surface."]
 
-## Step 5: Hand off to `/precommit-review`
+## Step 5: Hand off to `/eg-precommit-review`
 
-Run `/precommit-review`. Pass the feature name as `$ARGUMENTS` so the reviewer focuses there.
+Run `/eg-precommit-review`. Pass the feature name as `$ARGUMENTS` so the reviewer focuses there.
 
 ## Step 6: Test gate
 
@@ -148,7 +148,7 @@ Print to the user:
 - Files touched (grouped by layer: [BOOTSTRAP: layer names per stack])
 - Tests added (file:test name each)
 - Design-check result (gaps surfaced and how each was resolved)
-- `/precommit-review` outcome (rounds, fixes, rebuttals verbatim)
+- `/eg-precommit-review` outcome (rounds, fixes, rebuttals verbatim)
 - Test gate status
 - [BOOTSTRAP: walkthrough field, e.g. "Chrome MCP walkthrough summary (golden path + which edge cases were exercised; cross-tenant verification result)" / "Simulator walkthrough summary (which platform, golden path + failure modes exercised)"]
 - Out-of-scope follow-ups noted in the design doc

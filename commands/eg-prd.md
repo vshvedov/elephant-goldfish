@@ -3,9 +3,9 @@ description: Build a thorough PRD from a rough idea: codebase grounding, structu
 argument-hint: idea or feature description (the PRD's seed)
 ---
 
-Build a Product Requirements Document for an idea or feature, with high rigor: ground the request in the actual codebase, surface every gap in the user's description and resolve them through structured Q&A, then run deep research (web search, parallel goldfish, optional Chrome MCP for logged-in sources) before synthesizing the PRD. Output is the PRD itself, ready to feed into `/new-feature` or be saved as a durable artifact.
+Build a Product Requirements Document for an idea or feature, with high rigor: ground the request in the actual codebase, surface every gap in the user's description and resolve them through structured Q&A, then run deep research (web search, parallel goldfish, optional Chrome MCP for logged-in sources) before synthesizing the PRD. Output is the PRD itself, ready to feed into `/eg-new-feature` or be saved as a durable artifact.
 
-This sits **between** `/brainstorm` (concept exploration) and `/new-feature` (implementation): `/brainstorm` asks "what should we build?"; `/eg-prd` asks "what exactly are we building, and what's the surrounding context?"; `/new-feature` asks "how do we ship it?"
+This sits **between** `/eg-brainstorm` (concept exploration) and `/eg-new-feature` (implementation): `/eg-brainstorm` asks "what should we build?"; `/eg-prd` asks "what exactly are we building, and what's the surrounding context?"; `/eg-new-feature` asks "how do we ship it?"
 
 `$ARGUMENTS` is the idea. If empty, ask for one before doing anything. If `$ARGUMENTS` is a GitHub issue URL or `#<number>`, fetch it with `gh issue view <number>` and use its title + body as the seed.
 
@@ -40,7 +40,7 @@ Three questions in sequence (one `AskUserQuestion` call each):
 - `options`:
   1. **Save as `[BOOTSTRAP: prd path, e.g. `docs/prds/<slug>-<YYYY-MM-DD>.md` or `docs/specs/`]`** — "Durable artifact. Recommended for anything Standard or Comprehensive."
   2. **Print and chat only** — "PRD lives in this conversation. Good for Lightweight or throwaway exploration."
-  3. **Hand off to `/new-feature` after** — "Once the PRD is approved, end with the literal `/new-feature <one-line summary>` so the next step is one command away."
+  3. **Hand off to `/eg-new-feature` after** — "Once the PRD is approved, end with the literal `/eg-new-feature <one-line summary>` so the next step is one command away."
   4. **Save to memory** — "Persist as a durable note (e.g. CLAUDE.md or your memory system) for future sessions to recall. Prefer this for cross-cutting policies the PRD discovers, not the full doc."
 
 Cache the three answers. They drive the rest of the run.
@@ -214,7 +214,7 @@ The elephant now drafts the PRD by integrating: `$ARGUMENTS`, the codebase brief
 <table or bulleted list: risk, likelihood, impact, mitigation>
 
 ## Implementation hints
-<loose; refined later in /new-feature: layer ordering, data model sketch, key dependencies>
+<loose; refined later in /eg-new-feature: layer ordering, data model sketch, key dependencies>
 
 ## Open questions
 <gaps the user deferred, plus anything research surfaced as needing human verification>
@@ -260,7 +260,7 @@ Drive the output by what the user picked in Q3 (output target). Each Q3 selectio
 
 - **Save as `<path>`**: write the PRD to disk. If the path includes `<slug>` and `<YYYY-MM-DD>`, derive the slug from the PRD title (kebab-case, lowercase) and date from `date +%Y-%m-%d`. If the directory doesn't exist, create it. Confirm the path back to the user.
 - **Save to memory**: write the cross-cutting policies / constraints the PRD discovered (NOT the full PRD body — just the durable nuggets that future sessions should know) to the project's memory system or CLAUDE.md. Surface the diff before applying.
-- **Hand off to `/new-feature`**: print the literal command the user can paste to invoke `/new-feature`, with a one-line feature description sourced from the PRD's executive summary. Example: `Run /new-feature implement <PRD title>: <one-line summary> when ready.` Do NOT auto-invoke.
+- **Hand off to `/eg-new-feature`**: print the literal command the user can paste to invoke `/eg-new-feature`, with a one-line feature description sourced from the PRD's executive summary. Example: `Run /eg-new-feature implement <PRD title>: <one-line summary> when ready.` Do NOT auto-invoke.
 - **Print and chat only**: do nothing further.
 
 If multiple Q3 options were picked, do all of them.
@@ -274,6 +274,6 @@ Print to the user:
 - Gaps surfaced / filled / deferred (counts)
 - Research lenses run
 - Where the PRD lives now (file path, memory entry, both, or chat-only)
-- Next action (e.g. "Run `/new-feature ...` when ready" or "Open questions need user input before this is shippable")
+- Next action (e.g. "Run `/eg-new-feature ...` when ready" or "Open questions need user input before this is shippable")
 
 **STOP.** Do NOT commit; auto mode does not override the project's commit policy. If the PRD was saved to disk, it's a new file the user will commit themselves when ready. [BOOTSTRAP: commit-policy reminder per project.]

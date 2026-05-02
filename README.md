@@ -32,13 +32,13 @@ Five slash commands that wrap that pattern around real work:
 
 | Command | What it does |
 |---|---|
-| `/brainstorm <rough idea>` | Early-stage concept design. **Inverts** the pattern: spawns multiple goldfish in parallel, each with a different lens (technical / business / UX / contrarian / market research), free to web-search. Elephant synthesizes a concepts brief. All clarifying questions go through `AskUserQuestion`. |
-| `/eg-prd <idea \| feature description>` | Build a thorough PRD: codebase grounding → structured gap-filling via `AskUserQuestion` → deep research with parallel goldfish (web + optional Chrome MCP for logged-in sources like Reddit) → synthesized PRD. Sits between `/brainstorm` and `/new-feature`. Output is saved as a doc, persisted to memory, and/or piped into `/new-feature`. |
-| `/fix-bug <description \| #issue \| URL>` | Problem doc → goldfish diagnosis check → failing test → fix → `/precommit-review` → test gate. |
-| `/new-feature <description \| #issue \| URL>` | Scope confirm → design doc → goldfish design check → implement → `/precommit-review` → test gate. |
-| `/precommit-review` | Local independent-review loop on the pending diff (lint + typecheck + tests as pre-flight, then a fresh subagent reviews the diff cold). |
+| `/eg-brainstorm <rough idea>` | Early-stage concept design. **Inverts** the pattern: spawns multiple goldfish in parallel, each with a different lens (technical / business / UX / contrarian / market research), free to web-search. Elephant synthesizes a concepts brief. All clarifying questions go through `AskUserQuestion`. |
+| `/eg-prd <idea \| feature description>` | Build a thorough PRD: codebase grounding → structured gap-filling via `AskUserQuestion` → deep research with parallel goldfish (web + optional Chrome MCP for logged-in sources like Reddit) → synthesized PRD. Sits between `/eg-brainstorm` and `/eg-new-feature`. Output is saved as a doc, persisted to memory, and/or piped into `/eg-new-feature`. |
+| `/eg-fix-bug <description \| #issue \| URL>` | Problem doc → goldfish diagnosis check → failing test → fix → `/eg-precommit-review` → test gate. |
+| `/eg-new-feature <description \| #issue \| URL>` | Scope confirm → design doc → goldfish design check → implement → `/eg-precommit-review` → test gate. |
+| `/eg-precommit-review` | Local independent-review loop on the pending diff (lint + typecheck + tests as pre-flight, then a fresh subagent reviews the diff cold). |
 
-`/brainstorm` produces a concept; `/eg-prd` turns a concept into requirements; `/new-feature` and `/fix-bug` produce code; `/precommit-review` validates code. Each upstream stage feeds the next one.
+`/eg-brainstorm` produces a concept; `/eg-prd` turns a concept into requirements; `/eg-new-feature` and `/eg-fix-bug` produce code; `/eg-precommit-review` validates code. Each upstream stage feeds the next one.
 
 Each implementation command stops short of committing. The user authorizes the commit explicitly when ready.
 
@@ -63,15 +63,15 @@ The customized commands keep the same shape (problem doc, goldfish, failing test
 
 Some projects need a stack-specific verb the generic commands don't cover — for example, a creative-coding project that ships modular plugins might want `/new-plugin` with a recipe covering the manifest, DSP, registration steps, and a mandatory hardware-style verification pass. A SaaS with a heavy schema layer might want `/new-migration` with a backfill rubric. Pattern:
 
-1. Copy `commands/new-feature.md` from your target as the starting shape.
+1. Copy `commands/eg-new-feature.md` from your target as the starting shape.
 2. Tailor: replace the design rubric with the project-specific recipe (the architectural invariants, the canonical "how to add one of these" steps from your CLAUDE.md, the verification path).
-3. Add a `Routing` note at the top of `/new-feature.md` so users (and Claude) know when to switch.
+3. Add a `Routing` note at the top of `/eg-new-feature.md` so users (and Claude) know when to switch.
 
 The command stays in `<target>/.claude/commands/` only — it's project-specific, doesn't belong in this template repo.
 
 ## Why a separate repo
 
-So the templates evolve in one place. When you tighten `/precommit-review`'s reviewer prompt because the goldfish kept missing a class of bug, you do it here once, and re-bootstrap the projects that pull from this. Projects can also pin to a specific commit if they want a frozen version.
+So the templates evolve in one place. When you tighten `/eg-precommit-review`'s reviewer prompt because the goldfish kept missing a class of bug, you do it here once, and re-bootstrap the projects that pull from this. Projects can also pin to a specific commit if they want a frozen version.
 
 ## License
 

@@ -5,7 +5,7 @@ argument-hint: rough idea, problem space, or strategic question
 
 Brainstorm a new concept using the elephant/goldfish workflow, **inverted**: instead of one goldfish stress-testing the elephant's plan, you spawn **multiple** goldfish in parallel, each with a different lens, each free to be creative and pull from the web. Their lack of shared context with the elephant is the point — they generate divergent ideas, not convergent ones. The elephant then synthesizes.
 
-Use this for **early-stage** thinking: a half-formed app idea, an "I wonder if X" question, a feature whose problem is clear but whose shape isn't, a strategy you're stress-testing before committing. Not for implementation work — for that, hand off to `/new-feature` at the end.
+Use this for **early-stage** thinking: a half-formed app idea, an "I wonder if X" question, a feature whose problem is clear but whose shape isn't, a strategy you're stress-testing before committing. Not for implementation work — for that, hand off to `/eg-new-feature` at the end.
 
 `$ARGUMENTS` is the rough idea. If empty, ask for one before doing anything.
 
@@ -208,20 +208,20 @@ If the user picks options 4 or 5, ask in chat with one targeted prompt: option 4
 Then ask **Q7** via `AskUserQuestion`:
 
 **Q7 — Handoff:**
-- `question`: "Want to spin the chosen concept into `/new-feature` to start designing the build?"
+- `question`: "Want to spin the chosen concept into `/eg-new-feature` to start designing the build?"
 - `header`: `"Handoff"`
 - `multiSelect`: `false`
 - `options`:
-  1. **Yes, hand off to `/new-feature`** — "Use the chosen concept as the feature description."
+  1. **Yes, hand off to `/eg-new-feature`** — "Use the chosen concept as the feature description."
   2. **Not yet** — "I'll sit with it. Save the brief and stop."
 
-If they pick yes, end this command and tell the user: "Run `/new-feature <chosen concept name + one-sentence description>` when ready."
+If they pick yes, end this command and tell the user: "Run `/eg-new-feature <chosen concept name + one-sentence description>` when ready."
 
 If **Another round, tighter framing**: capture the user's refinements in chat, update the seed, re-run from Step 2 with the same lenses.
 
 If **Another round, different lenses**: present the lens kit (Step 2's list) via `AskUserQuestion` with `multiSelect: true` and let the user pick. Re-run from Step 2 with the new selection.
 
-If **Save brief and stop**: write the concepts brief to `[BOOTSTRAP: docs path or inferred working-notes location, e.g. `docs/brainstorms/<slug>-<YYYY-MM-DD>.md` or `notes/`]` ONLY if the user confirms via one more `AskUserQuestion`:
+If **Save brief and stop**: write the concepts brief to `[BOOTSTRAP: docs path or inferred working-notes location, e.g. `docs/eg-brainstorms/<slug>-<YYYY-MM-DD>.md` or `notes/`]` ONLY if the user confirms via one more `AskUserQuestion`:
 
 **Q8 — Save location:**
 - `question`: "Where should I save the brief?"
@@ -242,6 +242,6 @@ Print to the user:
 - Number of concepts surfaced (post-dedup)
 - Top 3 ranked picks with one-line reasoning each
 - Where the brief was saved (if anywhere)
-- Next action (handoff to `/new-feature`, refinement, or stop)
+- Next action (handoff to `/eg-new-feature`, refinement, or stop)
 
-**STOP.** No commit, no code changes — this command produces a brief, not a diff. If the user picked the handoff option, they'll invoke `/new-feature` themselves on the next turn.
+**STOP.** No commit, no code changes — this command produces a brief, not a diff. If the user picked the handoff option, they'll invoke `/eg-new-feature` themselves on the next turn.

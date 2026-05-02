@@ -3,13 +3,13 @@ description: Fix a bug using the elephant/goldfish workflow — problem doc, gol
 argument-hint: bug description, GitHub issue URL, or symptom + repro
 ---
 
-Fix a bug using the elephant/goldfish workflow. The aim: write a problem doc, goldfish-check the diagnosis (so we are not anchored to the first hypothesis), capture the bug as a failing test, fix it, then run `/precommit-review` and the test gate.
+Fix a bug using the elephant/goldfish workflow. The aim: write a problem doc, goldfish-check the diagnosis (so we are not anchored to the first hypothesis), capture the bug as a failing test, fix it, then run `/eg-precommit-review` and the test gate.
 
 `$ARGUMENTS` is the bug description provided by the user. If empty, ask for one before doing anything. If `$ARGUMENTS` is a GitHub issue URL or `#<number>`, fetch it first with `gh issue view <number> --json title,body,labels,comments` and seed the problem doc from it.
 
 ## Step 0: Triviality gate
 
-**Skip the goldfish/test ceremony for:** typo fixes in copy or comments, dead-code removal, version bumps, formatter-only diffs, single-line config tweaks. Go straight to Step 5 (`/precommit-review`) and the test gate.
+**Skip the goldfish/test ceremony for:** typo fixes in copy or comments, dead-code removal, version bumps, formatter-only diffs, single-line config tweaks. Go straight to Step 5 (`/eg-precommit-review`) and the test gate.
 
 **Run the full loop for everything else,** including small one-line code fixes — small diffs hide bugs disproportionately well.
 
@@ -95,11 +95,11 @@ Re-run the failing test. It must go green. If it does not, you have not fixed th
 
 [BOOTSTRAP: post-fix UI verification reminder, matching the Step 1 browser validation block.]
 
-## Step 5: Hand off to `/precommit-review`
+## Step 5: Hand off to `/eg-precommit-review`
 
-Run `/precommit-review` per the canonical procedure. The reviewer is a second goldfish — it sees only the diff. Triage findings, loop, and exit.
+Run `/eg-precommit-review` per the canonical procedure. The reviewer is a second goldfish — it sees only the diff. Triage findings, loop, and exit.
 
-If `/precommit-review` surfaces an issue that the Step 2 diagnosis goldfish missed, note it in the final report — it tells us where the diagnosis prompt needs to be tighter next time.
+If `/eg-precommit-review` surfaces an issue that the Step 2 diagnosis goldfish missed, note it in the final report — it tells us where the diagnosis prompt needs to be tighter next time.
 
 ## Step 6: Test gate
 
@@ -126,7 +126,7 @@ Print to the user:
 - Fix (file:line)
 - Test that captures it (file:test name)
 - Goldfish-vs-elephant agreement (converged / diverged + why)
-- `/precommit-review` outcome (rounds, fixes, rebuttals verbatim)
+- `/eg-precommit-review` outcome (rounds, fixes, rebuttals verbatim)
 - Test gate status
 
 **STOP.** Do NOT commit; auto mode does not override the project's commit policy. Wait for the user's literal commit instruction. [BOOTSTRAP: commit-policy reminder per project — e.g. "Follow the convention visible in `git log` (plain commit message, optionally referencing the GitHub issue with `Fix #<n>:`)." or "No `Co-Authored-By: Claude` trailers."]
