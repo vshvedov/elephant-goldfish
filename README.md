@@ -28,16 +28,17 @@ The **elephant** is your working session — Claude Code with full context: the 
 
 ## What this repo gives you
 
-Four slash commands that wrap that pattern around real work:
+Five slash commands that wrap that pattern around real work:
 
 | Command | What it does |
 |---|---|
 | `/brainstorm <rough idea>` | Early-stage concept design. **Inverts** the pattern: spawns multiple goldfish in parallel, each with a different lens (technical / business / UX / contrarian / market research), free to web-search. Elephant synthesizes a concepts brief. All clarifying questions go through `AskUserQuestion`. |
+| `/eg-prd <idea \| feature description>` | Build a thorough PRD: codebase grounding → structured gap-filling via `AskUserQuestion` → deep research with parallel goldfish (web + optional Chrome MCP for logged-in sources like Reddit) → synthesized PRD. Sits between `/brainstorm` and `/new-feature`. Output is saved as a doc, persisted to memory, and/or piped into `/new-feature`. |
 | `/fix-bug <description \| #issue \| URL>` | Problem doc → goldfish diagnosis check → failing test → fix → `/precommit-review` → test gate. |
 | `/new-feature <description \| #issue \| URL>` | Scope confirm → design doc → goldfish design check → implement → `/precommit-review` → test gate. |
 | `/precommit-review` | Local independent-review loop on the pending diff (lint + typecheck + tests as pre-flight, then a fresh subagent reviews the diff cold). |
 
-`/brainstorm` produces a concept; `/new-feature` and `/fix-bug` produce code; `/precommit-review` validates code. The first one feeds the second.
+`/brainstorm` produces a concept; `/eg-prd` turns a concept into requirements; `/new-feature` and `/fix-bug` produce code; `/precommit-review` validates code. Each upstream stage feeds the next one.
 
 Each implementation command stops short of committing. The user authorizes the commit explicitly when ready.
 
@@ -51,7 +52,7 @@ Once you give Claude the `gh repo clone` instruction, Claude will:
 1. Read [BOOTSTRAP.md](BOOTSTRAP.md) for the procedure.
 2. Inspect the target repo's stack (package.json / Gemfile / pubspec.yaml / pyproject / etc.).
 3. Read the target's CLAUDE.md if it exists; otherwise plan to create one.
-4. Customize the four generic templates in [commands/](commands/) for the detected stack: pre-flight commands, test tier picks, browser-validation path, and stack-specific "Hunt for" items in the reviewer prompt.
+4. Customize the five generic templates in [commands/](commands/) for the detected stack: pre-flight commands, test tier picks, browser-validation path, stack-specific "Hunt for" items in the reviewer prompt, and the PRD save location for `/eg-prd`.
 5. Drop the tailored files into `<target>/.claude/commands/`.
 6. Inject the "Working with Claude Code" section ([claude-md-snippet.md](claude-md-snippet.md)) into the target's CLAUDE.md.
 7. Print a summary and stop short of committing.

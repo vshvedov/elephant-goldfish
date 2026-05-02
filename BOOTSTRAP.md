@@ -13,6 +13,7 @@ gh api repos/vshvedov/elephant-goldfish/contents/<PATH> -H 'Accept: application/
 Files this procedure references later:
 
 - `commands/brainstorm.md`
+- `commands/eg-prd.md`
 - `commands/fix-bug.md`
 - `commands/new-feature.md`
 - `commands/precommit-review.md`
@@ -22,7 +23,7 @@ Recommended: fetch them all up front into a tmp dir, then read locally through t
 
 ```sh
 mkdir -p /tmp/elephant-goldfish/commands
-for f in claude-md-snippet.md commands/brainstorm.md commands/fix-bug.md commands/new-feature.md commands/precommit-review.md; do
+for f in claude-md-snippet.md commands/brainstorm.md commands/eg-prd.md commands/fix-bug.md commands/new-feature.md commands/precommit-review.md; do
   gh api "repos/vshvedov/elephant-goldfish/contents/${f}" -H 'Accept: application/vnd.github.raw' > "/tmp/elephant-goldfish/${f}"
 done
 ```
@@ -72,11 +73,14 @@ STACK PROFILE
 
 Print the stack profile to the user and ask them to confirm or correct before generating the commands. Misreads here propagate downstream.
 
-## Step 2: Generate the four commands
+## Step 2: Generate the five commands
 
-Use [commands/fix-bug.md](commands/fix-bug.md), [commands/new-feature.md](commands/new-feature.md), [commands/precommit-review.md](commands/precommit-review.md), and [commands/brainstorm.md](commands/brainstorm.md) as the skeletons. Substitute every `[BOOTSTRAP: ...]` marker with concrete values from the stack profile.
+Use [commands/fix-bug.md](commands/fix-bug.md), [commands/new-feature.md](commands/new-feature.md), [commands/precommit-review.md](commands/precommit-review.md), [commands/brainstorm.md](commands/brainstorm.md), and [commands/eg-prd.md](commands/eg-prd.md) as the skeletons. Substitute every `[BOOTSTRAP: ...]` marker with concrete values from the stack profile.
 
-`brainstorm.md` has only one `[BOOTSTRAP: ...]` marker — the save path for concept briefs. Pick a sensible default for the target (e.g. `docs/brainstorms/<slug>-<YYYY-MM-DD>.md` if there's a `docs/` tree, otherwise `notes/brainstorms/...`, otherwise just propose `.brainstorms/...` and let the user override). The rest of `brainstorm.md` is stack-agnostic by design — it produces concepts, not code.
+`brainstorm.md` and `eg-prd.md` are mostly stack-agnostic by design (they produce concepts and requirements, not code) — each carries one or two `[BOOTSTRAP: ...]` markers for save paths. Pick sensible defaults for the target:
+
+- `brainstorm.md` save path: `docs/brainstorms/<slug>-<YYYY-MM-DD>.md` if there's a `docs/` tree, otherwise `notes/brainstorms/...`.
+- `eg-prd.md` save path: `docs/prds/<slug>-<YYYY-MM-DD>.md` if there's a `docs/` tree, otherwise `docs/specs/...` or `notes/prds/...`. If the project already has a PRD location (look for `docs/prds/`, `docs/specs/`, `prd/`, or a PRD listed in CLAUDE.md), use that.
 
 Specifically:
 - `[BOOTSTRAP: lint command]` → the actual command (e.g. `npm run lint`, `mise exec ruby@2.7.5 -- bundle exec rubocop`, `flutter analyze`).
@@ -101,7 +105,7 @@ The base "Hunt for" list (universal items: bugs, security, race conditions, edge
 
 ## Step 3: Write the files
 
-Create `<target>/.claude/commands/{brainstorm,fix-bug,new-feature,precommit-review}.md` from the substituted templates. If the directory doesn't exist, create it.
+Create `<target>/.claude/commands/{brainstorm,eg-prd,fix-bug,new-feature,precommit-review}.md` from the substituted templates. If the directory doesn't exist, create it.
 
 ## Step 4: Update CLAUDE.md
 
