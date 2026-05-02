@@ -8,17 +8,15 @@ A reusable workflow for software work with Claude Code, built around the elephan
 
 ## Quick start
 
-In your target repo, in a Claude Code session, paste this:
+**In your target repo, open a Claude Code session and paste this message:**
 
-```
-Fetch the elephant-goldfish bootstrap procedure with:
-  gh api repos/vshvedov/elephant-goldfish/contents/BOOTSTRAP.md -H 'Accept: application/vnd.github.raw'
-Then follow the procedure to set up the elephant/goldfish workflow here.
-```
+> Fetch the elephant-goldfish bootstrap procedure with
+> `gh api repos/vshvedov/elephant-goldfish/contents/BOOTSTRAP.md -H 'Accept: application/vnd.github.raw'`,
+> then follow the procedure to set up the elephant/goldfish workflow here.
 
-Claude streams the procedure text directly through `gh api`, inspects your stack, fetches the five command templates and the CLAUDE.md snippet the same way, customizes them, drops them into `<target>/.claude/commands/`, and updates your `CLAUDE.md`. See [Bootstrap a new repo](#bootstrap-a-new-repo) below for the full procedure.
+That's the whole install. Claude reads `BOOTSTRAP.md`, inspects your stack, fetches the five command templates and the CLAUDE.md snippet the same way, customizes them for the detected language and conventions, writes them into `<target>/.claude/commands/`, and updates your `CLAUDE.md`. See [Bootstrap a new repo](#bootstrap-a-new-repo) below for the full procedure.
 
-> **Why `gh api`, not `git clone`?** No working copy left lying around — just text streamed in, customized, and written into the target. Cleaner than clone for a one-shot setup.
+**Why `gh api` instead of `git clone`?** No working copy left lying around — just text streamed in, customized, and written into the target. Cleaner than clone for a one-shot setup, and works the same whether this repo is public or private.
 
 ---
 
