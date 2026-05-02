@@ -2,6 +2,27 @@
 
 A reusable workflow for software work with Claude Code, built around the elephant/goldfish pattern from [Daniel Rensin's article](https://drensin.medium.com/elephants-goldfish-and-the-new-golden-age-of-software-engineering-c33641a48874).
 
+---
+
+## 🚀 Quick start — bootstrap a new repo
+
+In your target repo, in a Claude Code session, paste this:
+
+```
+Run `gh repo clone vshvedov/elephant-goldfish /tmp/elephant-goldfish`,
+then follow `/tmp/elephant-goldfish/BOOTSTRAP.md` to set up the
+elephant/goldfish workflow here.
+```
+
+That's it. Claude will inspect your stack, customize the four templates, drop them into `<target>/.claude/commands/`, and update your `CLAUDE.md`. See [Bootstrap a new repo](#bootstrap-a-new-repo) below for the full procedure.
+
+> **Requires** the [`gh` CLI](https://cli.github.com/) authenticated to GitHub. If you don't have it, the alternative one-liner is:
+> ```
+> Clone https://github.com/vshvedov/elephant-goldfish into /tmp via `git clone`, then follow /tmp/elephant-goldfish/BOOTSTRAP.md to set up the elephant/goldfish workflow here.
+> ```
+
+---
+
 ## The pattern in one paragraph
 
 The **elephant** is your working session — Claude Code with full context: the conversation, CLAUDE.md, recent file reads, your last few decisions. The **goldfish** is a fresh subagent with no prior context that stress-tests a problem doc, a design doc, or a diff. The asymmetry is the point: you are anchored to your hypothesis; a goldfish is not. If a goldfish, given only the problem statement, lands somewhere different from where you started, that disagreement is the cheapest signal you'll get that you were anchored. If a goldfish, given only the design doc, can't implement the same thing you intended, the doc is wrong, not the goldfish. **Design is the new code.** When AI generates more code than humans can review, the human-readable doc becomes the primary artifact.
@@ -25,11 +46,9 @@ You give a one-liner; Claude writes the doc back at you. **You don't author docs
 
 ## Bootstrap a new repo
 
-In your target repo, in a Claude Code session, say:
+(See the [Quick start](#-quick-start--bootstrap-a-new-repo) at the top for the one-line invocation.)
 
-> Go to `/Users/vsh/code/elephant-goldfish` (or `https://github.com/<you>/elephant-goldfish`), follow `BOOTSTRAP.md` to set up the elephant/goldfish workflow here.
-
-Claude will:
+Once you give Claude the `gh repo clone` instruction, Claude will:
 1. Read [BOOTSTRAP.md](BOOTSTRAP.md) for the procedure.
 2. Inspect the target repo's stack (package.json / Gemfile / pubspec.yaml / pyproject / etc.).
 3. Read the target's CLAUDE.md if it exists; otherwise plan to create one.
