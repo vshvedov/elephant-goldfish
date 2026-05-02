@@ -72,7 +72,20 @@ Print the seed. Then ask via `AskUserQuestion`:
   2. **Refine in chat first** — "I want to correct one or two things in chat before you spawn."
   3. **Restart** — "The seed misread the question. Re-run framing."
 
-If the user picks "Refine in chat first," allow ONE round of free-form correction in chat, then re-print the revised seed and re-ask Q4. If "Restart," go back to Step 0.
+If the user picks "Refine in chat first," ask **Q4.5** via `AskUserQuestion` first, to scope the correction (avoid an open-ended "what should I change?"):
+
+**Q4.5 — Which seed field needs correction:**
+- `question`: "Which part of the seed needs fixing?"
+- `header`: `"Refine"`
+- `multiSelect`: `true`
+- `options`:
+  1. **The thought itself** — "The one-sentence restatement of the user's input is off."
+  2. **What I'm really asking** — "The underlying need was misread."
+  3. **Constraints** — "The inferred audience / budget / tech assumptions are wrong."
+  4. **Success criteria** — "What 'good' looks like is off."
+  5. **Out of scope** — "Add or remove items from the out-of-scope list."
+
+Then ask in chat for the correction text for the selected field(s) only — one targeted prompt referencing the chosen fields, not an open-ended "what would you like to change?". Re-print the revised seed and re-ask Q4. If "Restart," go back to Step 0.
 
 ## Step 2: Spawn parallel divergent goldfish
 
@@ -177,9 +190,24 @@ After the brief, ask:
   4. **Save brief and stop** — "Good output, file it for later, no immediate action."
   5. **Drop it** — "This direction isn't worth pursuing."
 
-If **Pick a direction**: ask which concept (free-form chat is fine here — they're naming a concept that already exists in the brief), then ask via `AskUserQuestion`:
+If **Pick a direction**: ask **Q6** via `AskUserQuestion`. Use the **top 3 ranked picks** from the brief as the first three options, plus two escape hatches. Do NOT ask "which concept?" in free-form chat — the concepts are enumerable, so they belong as options.
 
-**Q6 — Handoff:**
+**Q6 — Which concept to commit to:**
+- `question`: "Which concept do you want to commit to?"
+- `header`: `"Concept"`
+- `multiSelect`: `false`
+- `options`:
+  1. **<Top ranked pick name>** — "<one-line bet from the brief>"
+  2. **<2nd ranked pick name>** — "<one-line bet from the brief>"
+  3. **<3rd ranked pick name>** — "<one-line bet from the brief>"
+  4. **A different concept from the brief** — "I'll name one of the others in chat."
+  5. **A hybrid or new direction** — "I'll describe a combination or fresh angle in chat."
+
+If the user picks options 4 or 5, ask in chat with one targeted prompt: option 4 → "Which concept from the brief?"; option 5 → "Describe the hybrid or new direction in one or two sentences." Both are inherently free-form; everything else is a click.
+
+Then ask **Q7** via `AskUserQuestion`:
+
+**Q7 — Handoff:**
 - `question`: "Want to spin the chosen concept into `/new-feature` to start designing the build?"
 - `header`: `"Handoff"`
 - `multiSelect`: `false`
@@ -195,7 +223,7 @@ If **Another round, different lenses**: present the lens kit (Step 2's list) via
 
 If **Save brief and stop**: write the concepts brief to `[BOOTSTRAP: docs path or inferred working-notes location, e.g. `docs/brainstorms/<slug>-<YYYY-MM-DD>.md` or `notes/`]` ONLY if the user confirms via one more `AskUserQuestion`:
 
-**Q7 — Save location:**
+**Q8 — Save location:**
 - `question`: "Where should I save the brief?"
 - `header`: `"Save"`
 - `multiSelect`: `false`
