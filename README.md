@@ -132,7 +132,7 @@ After you give Claude the `gh api` instruction, Claude will:
 3. Read the target's `CLAUDE.md` if it exists; otherwise propose creating one.
 4. Customize the five generic templates in [claude/commands/](claude/commands/) for the detected stack: pre-flight commands, test tier picks, browser-validation path, stack-specific "Hunt for" items in the reviewer prompt, and the PRD save location for `/eg-prd`.
 5. Drop the tailored files into `<target>/.claude/commands/`.
-6. Inject the "Working with Claude Code" section ([claude/claude-md-snippet.md](claude/claude-md-snippet.md)) into the target's `CLAUDE.md`.
+6. Inject the "Working with Claude Code" section ([claude/snippet.md](claude/snippet.md)) into the target's `CLAUDE.md`.
 7. Print a summary and stop short of committing.
 
 The customized commands keep the same shape (problem doc, goldfish, failing test, review, gate) but speak the target's language: `mise exec ... rails test` for Rails, `flutter test` for Flutter, `npm test && npm run test:e2e` for Node, and so on.
