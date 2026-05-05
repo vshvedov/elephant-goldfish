@@ -123,9 +123,16 @@ Use the Codex tool names in generated commands:
 - Structured user input: `request_user_input` when available; otherwise concise chat questions.
 - Browser validation: Browser Use / in-app browser plugin when available; otherwise a project-appropriate browser, simulator, or CLI fallback.
 
-## Step 3: Register the repo-local plugin
+## Step 3: Create the repo-local marketplace
 
-Create or update `.agents/plugins/marketplace.json` so Codex can discover the project-local plugin. Preserve any existing entries and append this entry if missing:
+Create or update `.agents/plugins/marketplace.json` so Codex can discover the project-local plugin. Preserve any existing entries and append this entry if missing.
+
+Use a marketplace name that is unique to the target repo, because Codex marketplace registrations live in the user's global `~/.codex/config.toml`. Recommended: derive it from the repo basename, lowercased and kebab-cased, with `-local` appended. Examples:
+
+- `/Users/me/code/bifrost` -> `bifrost-local`
+- `/Users/me/code/checkout-api` -> `checkout-api-local`
+
+If `.agents/plugins/marketplace.json` already exists, preserve its top-level `"name"` and use that value for later activation steps.
 
 ```json
 {
@@ -146,9 +153,9 @@ If the marketplace file does not exist, create:
 
 ```json
 {
-  "name": "project-local",
+  "name": "<repo-slug>-local",
   "interface": {
-    "displayName": "Project Local Plugins"
+    "displayName": "<Project Name> Local Plugins"
   },
   "plugins": [
     {
@@ -167,7 +174,38 @@ If the marketplace file does not exist, create:
 }
 ```
 
-## Step 4: Update AGENTS.md
+## Step 4: Activate the plugin in Codex
+
+Creating `.agents/plugins/marketplace.json` is not enough. Codex will not show slash commands until the local marketplace is registered and the plugin is enabled in the user's active Codex config.
+
+Do not stop after writing the repo files. Complete this activation step before reporting the install as done.
+
+First, register the target repo as a Codex plugin marketplace. Use the target repo root, not the plugin directory:
+
+```sh
+codex plugin marketplace add "$(pwd)"
+```
+
+Then verify or add these entries in `~/.codex/config.toml`, preserving all existing marketplaces and plugins:
+
+```toml
+[marketplaces.<repo-slug>-local]
+source_type = "local"
+source = "<absolute path to target repo>"
+
+[plugins."elephant-goldfish-codex@<repo-slug>-local"]
+enabled = true
+```
+
+Notes:
+
+- `codex plugin marketplace add "$(pwd)"` usually creates or updates the `[marketplaces.<repo-slug>-local]` stanza. If it uses a different marketplace key, use that key in the plugin enable stanza.
+- Do not overwrite `~/.codex/config.toml`. Append or update only these two relevant stanzas.
+- If another marketplace with the same name already points at a different repo, choose a more specific name, update `.agents/plugins/marketplace.json` to match, then register again.
+- Slash commands are namespaced by plugin, so they appear as `/elephant-goldfish-codex:eg-brainstorm`, not plain `/eg-brainstorm`.
+- The current Codex session may not refresh the slash-command list. Tell the user to start a new Codex session or reload the app after activation.
+
+## Step 5: Update AGENTS.md
 
 Read `codex/agents-md-snippet.md`. Tailor the placeholders to match the target's setup and inject the snippet into `AGENTS.md`.
 
@@ -175,24 +213,27 @@ Read `codex/agents-md-snippet.md`. Tailor the placeholders to match the target's
 - If no `AGENTS.md` exists, ask before creating one. Seed it with a project overview placeholder, the snippet, and a short build/test command stub.
 - Do not copy the Claude `CLAUDE.md` section verbatim. Mirror durable project facts only.
 
-## Step 5: Sanity-check the output
+## Step 6: Sanity-check the output
 
 For each generated file:
 
 - No `[BOOTSTRAP: ...]` markers remain.
 - The plugin manifest JSON parses.
 - `.agents/plugins/marketplace.json` parses and preserves existing plugins.
+- `~/.codex/config.toml` has an active `[marketplaces.<repo-slug>-local]` entry pointing at the target repo.
+- `~/.codex/config.toml` has `[plugins."elephant-goldfish-codex@<repo-slug>-local"] enabled = true`, using the actual marketplace key if different.
 - Commands referenced actually exist in the target.
 - File paths in test-tier picks correspond to real folders where possible.
 - The command prompts still preserve the elephant/goldfish asymmetry: goldfish see only the artifact they need, not the elephant's hidden hypothesis or implementation plan.
 
-## Step 6: Final report
+## Step 7: Final report
 
 Print to the user:
 
 - Stack profile (confirmed or corrected)
 - Codex plugin files created
-- Marketplace entry status
+- Marketplace file status
+- Codex activation status: marketplace key, plugin enable stanza, and whether a new session/reload is needed
 - AGENTS.md change
 - Claude files preserved
 - Anything you could not infer

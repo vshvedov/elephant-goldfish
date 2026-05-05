@@ -63,7 +63,7 @@ Five workflow commands/skills for each agent:
 
 Claude Code uses the templates in [claude/](claude/), installs into `<target>/.claude/commands/`, and injects a "Working with Claude Code" section into `CLAUDE.md`.
 
-Codex uses the templates in [codex/](codex/), installs a project-local plugin under `<target>/plugins/elephant-goldfish-codex/`, registers it in `<target>/.agents/plugins/marketplace.json`, and injects a "Working with Codex (elephant/goldfish)" section into `AGENTS.md`.
+Codex uses the templates in [codex/](codex/), installs a project-local plugin under `<target>/plugins/elephant-goldfish-codex/`, registers it in `<target>/.agents/plugins/marketplace.json`, activates it in `~/.codex/config.toml`, and injects a "Working with Codex (elephant/goldfish)" section into `AGENTS.md`.
 
 Gemini CLI uses the templates in [gemini/](gemini/), installs workspace-scoped skills under `<target>/.gemini/skills/`, and injects a "Working with Gemini CLI" section into `GEMINI.md`.
 
@@ -167,8 +167,10 @@ After you give Codex the `gh api` instruction, Codex will:
 3. Customize the Codex templates in [codex/commands/](codex/commands/) for the detected stack.
 4. Create `<target>/plugins/elephant-goldfish-codex/` with `.codex-plugin/plugin.json` and the five command files.
 5. Register the project-local plugin in `<target>/.agents/plugins/marketplace.json`.
-6. Inject the "Working with Codex (elephant/goldfish)" section ([codex/agents-md-snippet.md](codex/agents-md-snippet.md)) into `AGENTS.md`.
-7. Print a summary and stop short of committing.
+6. Register that local marketplace with Codex using `codex plugin marketplace add <target-root>`.
+7. Enable the plugin in `~/.codex/config.toml` as `elephant-goldfish-codex@<repo-slug>-local`.
+8. Inject the "Working with Codex (elephant/goldfish)" section ([codex/agents-md-snippet.md](codex/agents-md-snippet.md)) into `AGENTS.md`.
+9. Print a summary and remind you to start a new Codex session or reload the app if the slash-command list has not refreshed.
 
 After you give Gemini CLI the `gh api` instruction, it will:
 

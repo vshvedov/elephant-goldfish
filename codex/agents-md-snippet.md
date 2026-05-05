@@ -8,6 +8,8 @@ This is the section that gets added to the target repo's `AGENTS.md` during Code
 
 This repo has a project-local Codex plugin at [plugins/elephant-goldfish-codex/](plugins/elephant-goldfish-codex/) with five slash commands that mirror the Claude Code elephant/goldfish workflow. The elephant is the current Codex thread with full repo and conversation context. A goldfish is a fresh Codex subagent, spawned with only the problem doc, design doc, research seed, or diff it needs.
 
+The commands are namespaced by plugin. Use `/elephant-goldfish-codex:eg-*`, not plain `/eg-*`. If they do not appear in the slash-command list, confirm the repo-local marketplace is registered in `~/.codex/config.toml`, the plugin is enabled, and then start a new Codex session or reload the app.
+
 | Command | When to use |
 |---|---|
 | `/elephant-goldfish-codex:eg-brainstorm <rough idea>` | Early-stage concept design. Multiple fresh goldfish run in parallel with different lenses, then the elephant synthesizes a concepts brief. |
