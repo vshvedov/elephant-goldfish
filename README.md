@@ -87,6 +87,27 @@ You should see the list of all e/g skills:
 
 ---
 
+## The Pattern: Adaptive Injection
+
+This repository does not provide static configuration. Instead, it uses **Adaptive Injection**. When you bootstrap a repository:
+1. The AI analyzes your **local stack** (languages, frameworks, test runners).
+2. It fetches **generic templates** from this repo.
+3. It **contextualizes** those templates, replacing `[BOOTSTRAP: ...]` markers with your actual project commands.
+
+This ensures that `/eg-fix-bug` in a Rails app knows to run `bundle exec rails test`, while in a Flutter app it runs `flutter test`.
+
+## Keeping Up to Date
+
+Since your local commands are customized, you can't simply overwrite them when this repository updates. To sync the latest logic while preserving your local configuration:
+
+1. Open [PROMPTS.md](./PROMPTS.md).
+2. Copy the **"Update Elephant/Goldfish Patterns"** prompt.
+3. Paste it into your AI agent (Claude, Gemini, or Codex) inside your bootstrapped project.
+
+The AI will fetch the latest templates, identify your local adaptations, and perform a "smart merge" to bring in new workflow improvements without breaking your local build commands.
+
+---
+
 ## What you get
 
 Five workflow commands/skills for each agent:
