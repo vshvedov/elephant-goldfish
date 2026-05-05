@@ -87,7 +87,7 @@ You should see the list of all e/g skills:
 
 ---
 
-## The Pattern: Adaptive Injection
+## Adaptive Injection
 
 This repository does not provide static configuration. Instead, it uses **Adaptive Injection**. When you bootstrap a repository:
 1. The AI analyzes your **local stack** (languages, frameworks, test runners).
