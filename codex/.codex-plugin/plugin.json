@@ -1,7 +1,7 @@
 {
   "name": "elephant-goldfish-codex",
-  "version": "0.1.0",
-  "description": "Codex-native elephant/goldfish workflow commands for design, implementation, and independent review",
+  "version": "0.2.0",
+  "description": "Codex-native elephant/goldfish workflow skills for design, implementation, and independent review",
   "author": {
     "name": "elephant-goldfish"
   },
@@ -10,15 +10,17 @@
   "keywords": [
     "codex",
     "workflow",
+    "skills",
     "subagents",
     "code-review",
     "prd",
     "design-doc"
   ],
+  "skills": "./skills/",
   "interface": {
     "displayName": "Elephant/Goldfish",
     "shortDescription": "Structured Codex workflows with fresh goldfish checks",
-    "longDescription": "Adds Codex slash commands for the elephant/goldfish pattern: brainstorm, PRD, bug fix, new feature, and pre-commit independent review. The working Codex session is the elephant; fresh Codex subagents are goldfish.",
+    "longDescription": "Adds Codex skills for the elephant/goldfish pattern: brainstorm, PRD, bug fix, new feature, and pre-commit independent review. The working Codex session is the elephant; fresh Codex subagents are goldfish.",
     "developerName": "elephant-goldfish",
     "category": "Coding",
     "capabilities": [
@@ -26,9 +28,9 @@
       "Write"
     ],
     "defaultPrompt": [
-      "Run /elephant-goldfish-codex:eg-precommit-review",
-      "Run /elephant-goldfish-codex:eg-new-feature <feature>",
-      "Run /elephant-goldfish-codex:eg-fix-bug <bug>"
+      "Use $eg-precommit-review to review my pending changes.",
+      "Use $eg-new-feature to build this feature: <feature>",
+      "Use $eg-fix-bug to fix this bug: <bug>"
     ]
   }
 }

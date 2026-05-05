@@ -45,7 +45,7 @@ In your target repo, open a Gemini CLI session and paste this message:
 
 ---
 
-*The installs are additive. Claude Code gets `.claude/commands/` and `CLAUDE.md`; Codex gets a repo-local plugin plus `AGENTS.md`; Gemini CLI gets local workspace Skills in `.gemini/skills/` plus `GEMINI.md`. They can live in the same repo and should mirror the same project conventions.*
+*The installs are additive. Claude Code gets `.claude/commands/` and `CLAUDE.md`; Codex gets a repo-local plugin with skills, user-skill symlinks for autocomplete, and `AGENTS.md`; Gemini CLI gets local workspace Skills in `.gemini/skills/` plus `GEMINI.md`. They can live in the same repo and should mirror the same project conventions.*
 
 ---
 
@@ -55,15 +55,15 @@ Five workflow commands/skills for each agent:
 
 | Stage | Claude Code | Codex | Gemini CLI |
 |---|---|---|---|
-| Brainstorm | `/eg-brainstorm` | `/elephant-goldfish-codex:eg-brainstorm` | `eg-brainstorm` Skill |
-| PRD | `/eg-prd` | `/elephant-goldfish-codex:eg-prd` | `eg-prd` Skill |
-| Bug fix | `/eg-fix-bug` | `/elephant-goldfish-codex:eg-fix-bug` | `eg-fix-bug` Skill |
-| New feature | `/eg-new-feature` | `/elephant-goldfish-codex:eg-new-feature` | `eg-new-feature` Skill |
-| Precommit review | `/eg-precommit-review` | `/elephant-goldfish-codex:eg-precommit-review` | `eg-precommit-review` Skill |
+| Brainstorm | `/eg-brainstorm` | `Use $eg-brainstorm ...` | `eg-brainstorm` Skill |
+| PRD | `/eg-prd` | `Use $eg-prd ...` | `eg-prd` Skill |
+| Bug fix | `/eg-fix-bug` | `Use $eg-fix-bug ...` | `eg-fix-bug` Skill |
+| New feature | `/eg-new-feature` | `Use $eg-new-feature ...` | `eg-new-feature` Skill |
+| Precommit review | `/eg-precommit-review` | `Use $eg-precommit-review ...` | `eg-precommit-review` Skill |
 
 Claude Code uses the templates in [claude/](claude/), installs into `<target>/.claude/commands/`, and injects a "Working with Claude Code" section into `CLAUDE.md`.
 
-Codex uses the templates in [codex/](codex/), installs a project-local plugin under `<target>/plugins/elephant-goldfish-codex/`, registers it in `<target>/.agents/plugins/marketplace.json`, activates it in `~/.codex/config.toml`, and injects a "Working with Codex (elephant/goldfish)" section into `AGENTS.md`.
+Codex uses the templates in [codex/](codex/), installs a project-local plugin with skills under `<target>/plugins/elephant-goldfish-codex/`, registers it in `<target>/.agents/plugins/marketplace.json`, activates it in `~/.codex/config.toml`, symlinks the skills into `${CODEX_HOME:-~/.codex}/skills/eg-*` for composer autocomplete in current Codex app builds, and injects a "Working with Codex (elephant/goldfish)" section into `AGENTS.md`.
 
 Gemini CLI uses the templates in [gemini/](gemini/), installs workspace-scoped skills under `<target>/.gemini/skills/`, and injects a "Working with Gemini CLI" section into `GEMINI.md`.
 
@@ -128,17 +128,19 @@ You don't have to start at the top. Pick the stage that matches what you have:
 
 ---
 
-## Commands
+## Commands And Skills
 
 | Intent | Claude Code | Codex | Gemini CLI |
 |---|---|---|---|
-| Early-stage concept design | `/eg-brainstorm <rough idea>` | `/elephant-goldfish-codex:eg-brainstorm <rough idea>` | Invoke `eg-brainstorm` skill |
-| PRD from idea / feature / issue | `/eg-prd <idea \| feature \| #issue>` | `/elephant-goldfish-codex:eg-prd <idea \| feature \| #issue>` | Invoke `eg-prd` skill |
-| Bug fix flow | `/eg-fix-bug <description \| #issue \| URL>` | `/elephant-goldfish-codex:eg-fix-bug <description \| #issue \| URL>` | Invoke `eg-fix-bug` skill |
-| Feature flow | `/eg-new-feature <description \| #issue \| URL>` | `/elephant-goldfish-codex:eg-new-feature <description \| #issue \| URL>` | Invoke `eg-new-feature` skill |
-| Independent diff review | `/eg-precommit-review` | `/elephant-goldfish-codex:eg-precommit-review` | Invoke `eg-precommit-review` skill |
+| Early-stage concept design | `/eg-brainstorm <rough idea>` | `Use $eg-brainstorm to brainstorm <rough idea>` | Invoke `eg-brainstorm` skill |
+| PRD from idea / feature / issue | `/eg-prd <idea \| feature \| #issue>` | `Use $eg-prd to write a PRD for <idea \| feature \| #issue>` | Invoke `eg-prd` skill |
+| Bug fix flow | `/eg-fix-bug <description \| #issue \| URL>` | `Use $eg-fix-bug to fix <description \| #issue \| URL>` | Invoke `eg-fix-bug` skill |
+| Feature flow | `/eg-new-feature <description \| #issue \| URL>` | `Use $eg-new-feature to build <description \| #issue \| URL>` | Invoke `eg-new-feature` skill |
+| Independent diff review | `/eg-precommit-review` | `Use $eg-precommit-review to review my pending changes` | Invoke `eg-precommit-review` skill |
 
-Implementation commands (`eg-fix-bug`, `eg-new-feature`) stop short of committing. The user authorizes the commit explicitly when ready.
+Implementation flows (`eg-fix-bug`, `eg-new-feature`) stop short of committing. The user authorizes the commit explicitly when ready.
+
+Codex note: current Codex builds do not support project-defined custom slash commands, so `/eg-*` and `/elephant-goldfish-codex:eg-*` are not expected to appear in the slash-command menu. Use `$eg-*` skill mentions instead.
 
 You give a one-liner; the agent writes the doc back at you. **You don't author docs by hand.** Most docs live in chat. They land on disk only when there's a future-you reason to keep them — a substantial feature, a new subsystem, a saved brainstorm brief, a PRD that will be revisited.
 
@@ -164,13 +166,14 @@ After you give Codex the `gh api` instruction, Codex will:
 
 1. Read [codex/BOOTSTRAP.md](codex/BOOTSTRAP.md) for the procedure.
 2. Inspect the target repo's `AGENTS.md`, `CLAUDE.md`, manifests, CI config, and recent commits.
-3. Customize the Codex templates in [codex/commands/](codex/commands/) for the detected stack.
-4. Create `<target>/plugins/elephant-goldfish-codex/` with `.codex-plugin/plugin.json` and the five command files.
+3. Customize the Codex skill templates in [codex/skills/](codex/skills/) for the detected stack.
+4. Create `<target>/plugins/elephant-goldfish-codex/` with `.codex-plugin/plugin.json` and the five skill folders.
 5. Register the project-local plugin in `<target>/.agents/plugins/marketplace.json`.
 6. Register that local marketplace with Codex using `codex plugin marketplace add <target-root>`.
 7. Enable the plugin in `~/.codex/config.toml` as `elephant-goldfish-codex@<repo-slug>-local`.
-8. Inject the "Working with Codex (elephant/goldfish)" section ([codex/agents-md-snippet.md](codex/agents-md-snippet.md)) into `AGENTS.md`.
-9. Print a summary and remind you to start a new Codex session or reload the app if the slash-command list has not refreshed.
+8. Symlink the skills into `${CODEX_HOME:-~/.codex}/skills/eg-*` so `$eg` autocomplete works in current Codex app builds.
+9. Inject the "Working with Codex (elephant/goldfish)" section ([codex/agents-md-snippet.md](codex/agents-md-snippet.md)) into `AGENTS.md`.
+10. Print a summary and remind you to start a new Codex session or reload the app if `$eg` autocomplete has not refreshed.
 
 After you give Gemini CLI the `gh api` instruction, it will:
 
@@ -186,25 +189,25 @@ All bootstraps explicitly preserve other agents' existing files (e.g. Codex pres
 
 ---
 
-## Project-specific commands
+## Project-specific Commands And Skills
 
-Some projects need a stack-specific verb the generic commands don't cover — for example, a creative-coding project that ships modular plugins might want `/eg-new-plugin` with a recipe covering the manifest, DSP, registration steps, and a hardware-style verification pass. A SaaS with a heavy schema layer might want `/eg-new-migration` with a backfill rubric.
+Some projects need a stack-specific verb the generic workflows don't cover — for example, a creative-coding project that ships modular plugins might want `eg-new-plugin` with a recipe covering the manifest, DSP, registration steps, and a hardware-style verification pass. A SaaS with a heavy schema layer might want `eg-new-migration` with a backfill rubric.
 
 Pattern:
 
-1. Copy `eg-new-feature.md` from the relevant target adapter as the starting shape: `.claude/commands/` for Claude Code, `plugins/elephant-goldfish-codex/commands/` for Codex, or `.gemini/skills/` for Gemini CLI.
+1. Copy `eg-new-feature.md` from the relevant target adapter as the starting shape: `.claude/commands/` for Claude Code, `plugins/elephant-goldfish-codex/skills/eg-new-feature/SKILL.md` for Codex, or `.gemini/skills/` for Gemini CLI.
 2. Tailor: replace the design rubric with the project-specific recipe (the architectural invariants, the canonical "how to add one of these" steps from `CLAUDE.md` / `AGENTS.md` / `GEMINI.md`, the verification path).
-3. Add a `Routing` note at the top of the generic new-feature command so users and agents know when to switch.
+3. Add a `Routing` note at the top of the generic new-feature command or skill so users and agents know when to switch.
 
-Use the `eg-` prefix for any project-specific command — keeps the namespace consistent so the elephant/goldfish set is grep-able and won't collide with generic verbs like `/prd` or `/research`.
+Use the `eg-` prefix for any project-specific command or skill — keeps the namespace consistent so the elephant/goldfish set is grep-able and won't collide with generic verbs like `/prd` or `/research`.
 
-The command stays in the target repo's agent-specific command folder only — it is project-specific and does not belong in this template repo unless it is broadly reusable.
+The command or skill stays in the target repo's agent-specific folder only — it is project-specific and does not belong in this template repo unless it is broadly reusable.
 
 ---
 
 ## Why a separate repo
 
-So the templates evolve in one place. When you tighten `/eg-precommit-review`'s reviewer prompt because the goldfish kept missing a class of bug, you do it here once, and re-bootstrap the projects that pull from this. Projects can pin to a specific commit if they want a frozen version.
+So the templates evolve in one place. When you tighten `eg-precommit-review`'s reviewer prompt because the goldfish kept missing a class of bug, you do it here once, and re-bootstrap the projects that pull from this. Projects can pin to a specific commit if they want a frozen version.
 
 ---
 

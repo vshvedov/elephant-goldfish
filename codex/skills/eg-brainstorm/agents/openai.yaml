@@ -1,0 +1,4 @@
+interface:
+  display_name: "Elephant/Goldfish Brainstorm"
+  short_description: "Run an elephant/goldfish concept brainstorm"
+  default_prompt: "Use $eg-brainstorm to brainstorm this idea:"

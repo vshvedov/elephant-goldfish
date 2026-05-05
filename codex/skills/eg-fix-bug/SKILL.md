@@ -1,12 +1,13 @@
 ---
+name: "eg-fix-bug"
 description: Fix a bug with Codex using problem doc, independent diagnosis, failing test, fix, review, and validation.
 ---
 
-# EG Fix Bug
+# EG Fix Bug Skill
 
-Fix a bug using the elephant/goldfish workflow. `$ARGUMENTS` is the bug description. If empty, ask for one.
+Fix a bug using the elephant/goldfish workflow. Use the user's text around the `$eg-fix-bug` skill mention as the bug description. If no description is provided, ask for one.
 
-If `$ARGUMENTS` is a GitHub issue URL or `#<number>`, fetch it with `gh issue view <number> --json title,body,labels,comments` and seed the problem doc from it.
+If the bug description is a GitHub issue URL or `#<number>`, fetch it with `gh issue view <number> --json title,body,labels,comments` and seed the problem doc from it.
 
 ## Triviality Gate
 
@@ -34,7 +35,7 @@ If there is no repro and the bug is not obvious from a single file read, stop an
 
 ## Goldfish Diagnosis
 
-The user invoked this command, so a fresh diagnosis subagent is explicitly authorized.
+The user invoked this skill, so a fresh diagnosis subagent is explicitly authorized.
 
 Spawn a fresh Codex subagent with `fork_context: false`. Use `agent_type: "explorer"` for narrow codebase lookup when available; otherwise use default.
 
@@ -75,7 +76,7 @@ Re-run the failing test. It must pass.
 
 ## Review
 
-Run `/elephant-goldfish-codex:eg-precommit-review <bug summary>` or apply the same review procedure from `eg-precommit-review.md`.
+Use `$eg-precommit-review <bug summary>` or apply the same review procedure from the `eg-precommit-review` skill.
 
 ## Test Gate
 

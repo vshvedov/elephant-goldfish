@@ -1,0 +1,4 @@
+interface:
+  display_name: "Elephant/Goldfish Fix Bug"
+  short_description: "Fix a bug with independent diagnosis and review"
+  default_prompt: "Use $eg-fix-bug to fix this bug:"

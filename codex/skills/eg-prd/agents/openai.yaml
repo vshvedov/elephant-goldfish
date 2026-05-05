@@ -1,0 +1,4 @@
+interface:
+  display_name: "Elephant/Goldfish PRD"
+  short_description: "Draft a PRD with elephant/goldfish checks"
+  default_prompt: "Use $eg-prd to turn this idea into a PRD:"

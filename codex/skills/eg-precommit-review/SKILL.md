@@ -1,12 +1,13 @@
 ---
+name: "eg-precommit-review"
 description: Run a Codex-native pre-commit independent-review loop on pending changes.
 ---
 
-# EG Precommit Review
+# EG Precommit Review Skill
 
 Run the pre-commit review loop. The goal is to validate pending changes locally before commit with a fresh reviewer that sees the diff cold.
 
-If `$ARGUMENTS` is non-empty, treat it as an additional focus area for the reviewer.
+If the user provides text around the `$eg-precommit-review` skill mention, treat it as an additional focus area for the reviewer.
 
 ## Preflight
 
@@ -49,7 +50,7 @@ New errors introduced by the diff are blockers. Pre-existing failures are out of
 
 ## Goldfish Review
 
-The user invoked this command, so fresh subagent review is explicitly authorized.
+The user invoked this skill, so fresh subagent review is explicitly authorized.
 
 Preferred path: spawn a fresh Codex subagent with `fork_context: false` and `agent_type: "default"`. If `spawn_agent` is unavailable, pipe the reviewer prompt into the Codex CLI fallback:
 
@@ -93,7 +94,7 @@ Do not surface style preferences, micro-refactors, or speculative concerns witho
 Output format: numbered list. For each finding, lead with file:line. End with the literal string `no findings` if and only if the diff is clean.
 ```
 
-If `$ARGUMENTS` is non-empty, replace `[NO ADDITIONAL FOCUS]` with `Additionally focus on: <$ARGUMENTS verbatim>`.
+If the user provided a focus area, replace `[NO ADDITIONAL FOCUS]` with `Additionally focus on: <focus area verbatim>`.
 
 ## Triage
 

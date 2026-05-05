@@ -1,12 +1,13 @@
 ---
+name: "eg-prd"
 description: Build a PRD with Codex using codebase grounding, gap-filling, research goldfish, and synthesis.
 ---
 
-# EG PRD
+# EG PRD Skill
 
-Build a Product Requirements Document from a rough idea. `$ARGUMENTS` is the seed. If empty, ask for one.
+Build a Product Requirements Document from a rough idea. Use the user's text around the `$eg-prd` skill mention as the seed. If no seed is provided, ask for one.
 
-If `$ARGUMENTS` is a GitHub issue URL or `#<number>`, fetch it with `gh issue view <number>` and use its title and body as the seed.
+If the seed is a GitHub issue URL or `#<number>`, fetch it with `gh issue view <number>` and use its title and body as the seed.
 
 ## Frame
 
@@ -20,7 +21,7 @@ Ask:
 
 ## Codebase Grounding
 
-The user invoked this command, so fresh subagents for codebase grounding are explicitly authorized.
+The user invoked this skill, so fresh subagents for codebase grounding are explicitly authorized.
 
 Spawn 1-2 fresh Codex subagents with `fork_context: false`; use `agent_type: "explorer"` when available.
 
@@ -71,7 +72,7 @@ Each goldfish gets only:
 ```text
 You are a fresh researcher with no prior context. Your lens is <LENS NAME>.
 
-SEED: <PASTE $ARGUMENTS>
+SEED: <PASTE USER SEED>
 CODEBASE BRIEF: <PASTE>
 ANSWERED GAPS: <PASTE>
 
@@ -118,7 +119,7 @@ If approved, apply the selected output targets:
 
 - Save PRD to `[BOOTSTRAP: prd save path]` if selected.
 - Persist only durable cross-cutting nuggets to AGENTS.md if selected; show the diff before applying.
-- Print the exact `/elephant-goldfish-codex:eg-new-feature <summary>` handoff command if selected.
+- Print the exact `Use $eg-new-feature to build <summary>` handoff prompt if selected.
 
 ## Final Report
 

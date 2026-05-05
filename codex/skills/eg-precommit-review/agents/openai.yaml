@@ -1,0 +1,4 @@
+interface:
+  display_name: "Elephant/Goldfish Precommit Review"
+  short_description: "Run an independent pre-commit review loop"
+  default_prompt: "Use $eg-precommit-review to review my pending changes."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Elephant/Goldfish New Feature"
+  short_description: "Build a feature with design and review goldfish"
+  default_prompt: "Use $eg-new-feature to build this feature:"

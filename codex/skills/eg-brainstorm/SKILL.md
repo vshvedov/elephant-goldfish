@@ -1,12 +1,13 @@
 ---
+name: "eg-brainstorm"
 description: Generate divergent concept ideas with parallel Codex goldfish and structured synthesis.
 ---
 
-# EG Brainstorm
+# EG Brainstorm Skill
 
 Brainstorm a new concept using the elephant/goldfish workflow inverted: multiple fresh goldfish generate divergent ideas, then the elephant synthesizes.
 
-`$ARGUMENTS` is the rough idea. If empty, ask for one.
+Use the user's text around the `$eg-brainstorm` skill mention as the rough idea. If no idea is provided, ask for one.
 
 ## Frame
 
@@ -24,7 +25,7 @@ Print:
 
 ```text
 SEED
-- The thought: <one sentence from $ARGUMENTS>
+- The thought: <one sentence from the user's rough idea>
 - What I think the user is really asking: <underlying need>
 - Stage: <answer>
 - Breadth target: <answer>
@@ -38,7 +39,7 @@ Ask whether the seed is right. If not, ask which field needs correction and revi
 
 ## Parallel Goldfish
 
-The user invoked this command, so parallel fresh subagents are explicitly authorized.
+The user invoked this skill, so parallel fresh subagents are explicitly authorized.
 
 Pick 3-5 lenses:
 

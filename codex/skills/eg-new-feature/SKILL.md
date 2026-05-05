@@ -1,12 +1,13 @@
 ---
+name: "eg-new-feature"
 description: Build a new feature with Codex using design doc, goldfish design check, implementation, review, and validation.
 ---
 
-# EG New Feature
+# EG New Feature Skill
 
-Build a new feature using the elephant/goldfish workflow. `$ARGUMENTS` is the feature description. If empty, ask for one.
+Build a new feature using the elephant/goldfish workflow. Use the user's text around the `$eg-new-feature` skill mention as the feature description. If no description is provided, ask for one.
 
-If `$ARGUMENTS` is a GitHub issue URL or `#<number>`, fetch it with `gh issue view <number> --json title,body,labels,comments` and seed the design doc from it.
+If the feature description is a GitHub issue URL or `#<number>`, fetch it with `gh issue view <number> --json title,body,labels,comments` and seed the design doc from it.
 
 [BOOTSTRAP: project-specific routing note]
 
@@ -37,7 +38,7 @@ For UI work, sketch the structure in plain text or pseudo-JSX. If a visual refer
 
 ## Goldfish Design Check
 
-The user invoked this command, so a fresh design-check subagent is explicitly authorized.
+The user invoked this skill, so a fresh design-check subagent is explicitly authorized.
 
 Spawn a fresh Codex subagent with `fork_context: false` and `agent_type: "default"`. If `spawn_agent` is unavailable, run the check locally as a separate cold prompt and keep implementation context out of the prompt.
 
@@ -81,7 +82,7 @@ Implement in that order. After each layer, run a focused verification before mov
 
 ## Review
 
-Run `/elephant-goldfish-codex:eg-precommit-review <feature name>` or apply the same review procedure from `eg-precommit-review.md`.
+Use `$eg-precommit-review <feature name>` or apply the same review procedure from the `eg-precommit-review` skill.
 
 ## Test Gate
 
