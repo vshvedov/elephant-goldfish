@@ -10,7 +10,7 @@ A reusable workflow for software work with Claude Code and Codex, built around t
 
 ### Claude Code
 
-In your target repo, open a Claude Code session and paste this message:
+In your target repo, open a Claude Code/Codex session and paste this message:
 
 > Fetch the elephant-goldfish bootstrap procedure with
 > `gh api repos/vshvedov/elephant-goldfish/contents/claude/BOOTSTRAP.md -H 'Accept: application/vnd.github.raw'`,
