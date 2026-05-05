@@ -12,6 +12,7 @@ A reusable workflow for software work with Claude Code, Codex, and Gemini CLI, b
 
 <img width="200" height="200" alt="claude-ai-200" src="https://github.com/user-attachments/assets/8f0ed03d-55ca-48c6-b1b5-96df712a145e" />
 
+
 In your target repo, open a Claude Code session and paste this message:
 
 > Fetch the elephant-goldfish bootstrap procedure with
@@ -24,6 +25,7 @@ The root `BOOTSTRAP.md` remains as a compatibility entrypoint for older install 
 
 <img width="200" height="200" alt="codex-color-200" src="https://github.com/user-attachments/assets/4a16e916-2a3d-498e-8d25-4017ab09cefc" />
 
+
 In the same target repo, open a Codex session and paste this message:
 
 > Fetch the Codex elephant-goldfish bootstrap procedure with
@@ -33,6 +35,7 @@ In the same target repo, open a Codex session and paste this message:
 ### Gemini CLI
 
 <img width="200" height="200" alt="gemini-200" src="https://github.com/user-attachments/assets/c837370b-d457-4717-ad30-30ea9beca77a" />
+
 
 In your target repo, open a Gemini CLI session and paste this message:
 
