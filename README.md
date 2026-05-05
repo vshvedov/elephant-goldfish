@@ -21,7 +21,7 @@ In your target repo, open a Claude Code session and paste this message:
 
 The root `BOOTSTRAP.md` remains as a compatibility entrypoint for older install snippets, but new Claude installs should fetch `claude/BOOTSTRAP.md` directly.
 
-### Codex
+### Codex (testing)
 
 <img width="200" height="200" alt="codex-color-200" src="https://github.com/user-attachments/assets/4a16e916-2a3d-498e-8d25-4017ab09cefc" />
 
@@ -32,7 +32,7 @@ In the same target repo, open a Codex session and paste this message:
 > `gh api repos/vshvedov/elephant-goldfish/contents/codex/BOOTSTRAP.md -H 'Accept: application/vnd.github.raw'`,
 > then follow the procedure to set up the Codex elephant/goldfish workflow here, preserving any existing setups for other AIs.
 
-### Gemini CLI
+### Gemini CLI (testing)
 
 <img width="200" height="200" alt="gemini-200" src="https://github.com/user-attachments/assets/c837370b-d457-4717-ad30-30ea9beca77a" />
 
