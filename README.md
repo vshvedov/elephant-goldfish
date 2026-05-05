@@ -99,15 +99,7 @@ Five workflow commands/skills for each agent:
 | New feature | `/eg-new-feature` | `Use $eg-new-feature ...` | `eg-new-feature` Skill |
 | Precommit review | `/eg-precommit-review` | `Use $eg-precommit-review ...` | `eg-precommit-review` Skill |
 
-Claude Code uses the templates in [claude/](claude/), installs into `<target>/.claude/commands/`, and injects a "Working with Claude Code" section into `CLAUDE.md`.
-
-Codex uses the templates in [codex/](codex/), installs a project-local plugin with skills under `<target>/plugins/elephant-goldfish-codex/`, registers it in `<target>/.agents/plugins/marketplace.json`, activates it in `~/.codex/config.toml`, symlinks the skills into `${CODEX_HOME:-~/.codex}/skills/eg-*` for composer autocomplete in current Codex app builds, and injects a "Working with Codex (elephant/goldfish)" section into `AGENTS.md`.
-
-Gemini CLI uses the templates in [gemini/](gemini/), installs workspace-scoped skills under `<target>/.gemini/skills/`, and injects a "Working with Gemini CLI" section into `GEMINI.md`.
-
 All bootstraps inspect the target stack and customize the generic templates for the detected language, test tiers, browser/simulator validation path, project-specific review gotchas, and commit convention. See [Bootstrap a new repo](#bootstrap-a-new-repo) below for the full procedure.
-
-**Why `gh api` instead of `git clone`?** No working copy left lying around — just text streamed in, customized, and written into the target. Cleaner than clone for a one-shot setup, and works the same whether this repo is public or private.
 
 ---
 
