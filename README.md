@@ -19,7 +19,7 @@ In your target repo, open a Claude Code session and paste this message:
 > `gh api repos/vshvedov/elephant-goldfish/contents/claude/BOOTSTRAP.md -H 'Accept: application/vnd.github.raw'`,
 > then follow the procedure to set up the elephant/goldfish workflow here, preserving any existing setups for other AIs.
 
-When done, reload Claude Code session (restart the app) and try typing:
+When done, reload Claude Code session (restart the app) and start typing:
 
 ```
 /eg-...
@@ -43,7 +43,7 @@ In the same target repo, open a Codex session and paste this message:
 > `gh api repos/vshvedov/elephant-goldfish/contents/codex/BOOTSTRAP.md -H 'Accept: application/vnd.github.raw'`,
 > then follow the procedure to set up the Codex elephant/goldfish workflow here, preserving any existing setups for other AIs.
 
-When done, you'll have a set of "Elephant/Goldfish" Codex skills. Try start typing:
+When done, you'll have a set of "Elephant/Goldfish" Codex skills. Start typing:
 
 ```
 $eg...
