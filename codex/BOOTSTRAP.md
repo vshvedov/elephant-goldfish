@@ -1,0 +1,209 @@
+# Codex BOOTSTRAP.md
+
+This file is read by Codex. The user has pointed you at this repo and asked you to set up the elephant/goldfish workflow in their target repo alongside any existing Claude Code setup. Do not remove or rewrite Claude files.
+
+## How to fetch the rest of this repo's Codex content
+
+There is no local working copy on the target machine — you got here by streaming this file's text through `gh api`. Fetch the remaining Codex files the same way, on demand:
+
+```sh
+gh api repos/vshvedov/elephant-goldfish/contents/<PATH> -H 'Accept: application/vnd.github.raw'
+```
+
+Files this procedure references later:
+
+- `codex/.codex-plugin/plugin.json`
+- `codex/agents-md-snippet.md`
+- `codex/commands/eg-brainstorm.md`
+- `codex/commands/eg-prd.md`
+- `codex/commands/eg-fix-bug.md`
+- `codex/commands/eg-new-feature.md`
+- `codex/commands/eg-precommit-review.md`
+
+Recommended: fetch them all up front into a tmp dir, then read locally through the rest of the steps:
+
+```sh
+mkdir -p /tmp/elephant-goldfish-codex/codex/commands /tmp/elephant-goldfish-codex/codex/.codex-plugin
+for f in codex/.codex-plugin/plugin.json codex/agents-md-snippet.md codex/commands/eg-brainstorm.md codex/commands/eg-prd.md codex/commands/eg-fix-bug.md codex/commands/eg-new-feature.md codex/commands/eg-precommit-review.md; do
+  gh api "repos/vshvedov/elephant-goldfish/contents/${f}" -H 'Accept: application/vnd.github.raw' > "/tmp/elephant-goldfish-codex/${f}"
+done
+```
+
+After this, every reference to `codex/<path>` below resolves to `/tmp/elephant-goldfish-codex/codex/<path>`.
+
+## Step 0: Confirm the target and preserve Claude
+
+The user invoked you from a working directory that is the target repo. Confirm the target's absolute path before writing.
+
+This is an additive Codex install. Preserve all existing Claude Code files:
+
+- Do not remove or rewrite `.claude/commands/*`.
+- Do not remove or rewrite `CLAUDE.md`.
+- It is OK to read `CLAUDE.md` to mirror project conventions into the Codex commands.
+
+If any of these Codex files already exist, ask whether to overwrite, augment, or abort before changing them:
+
+- `plugins/elephant-goldfish-codex/.codex-plugin/plugin.json`
+- `plugins/elephant-goldfish-codex/commands/{eg-brainstorm,eg-prd,eg-fix-bug,eg-new-feature,eg-precommit-review}.md`
+- `.agents/plugins/marketplace.json`
+- `AGENTS.md` section `## Working with Codex (elephant/goldfish)`
+
+## Step 1: Inspect the stack
+
+Read these files in the target if they exist (parallel reads):
+
+- `AGENTS.md` — Codex conventions, command policy, repo-local instructions
+- `CLAUDE.md` — existing Claude conventions that should be mirrored, not replaced
+- `package.json`, `Gemfile`, `pubspec.yaml`, `pyproject.toml`, `requirements.txt`, `setup.py`, `Pipfile`
+- `go.mod`, `Cargo.toml`, `composer.json`, `mix.exs`
+- `tsconfig.json`, `playwright.config.ts`, `vitest.config.ts`, `jest.config.js`, etc.
+- `Rakefile`, `Makefile`, `justfile`, `mise.toml`, `.tool-versions`, `.nvmrc`, `.ruby-version`
+- `docker-compose.yml`, `Dockerfile`
+- `.github/workflows/*.yml`
+
+Also run `git log --oneline -10` to learn the commit-message convention.
+
+From this, derive a stack profile:
+
+```
+STACK PROFILE
+- Language(s) and framework(s):
+- Package manager + version manager:
+- Linter + how to invoke:
+- Type-checker + how to invoke (or "n/a"):
+- Unit/integration test runner + how to invoke:
+- E2E test runner + how to invoke (or "n/a"):
+- Security scanner + how to invoke (or "n/a"):
+- Dev server: command + URL:
+- Browser validation strategy: Browser Use / in-app browser URL, simulator/device runs, or n/a:
+- Code-generation step required before tests + when:
+- Existing Claude workflow to preserve:
+- Existing Codex workflow, AGENTS.md rules, or repo-local plugin setup:
+- Commit message convention from `git log`:
+- Multi-tenancy / auth / scoping concerns the reviewer should always check:
+- Stack-specific gotchas:
+```
+
+Print the stack profile and ask the user to confirm or correct before generating the commands.
+
+## Step 2: Generate the Codex plugin files
+
+Use `codex/commands/*.md` as the skeletons. Substitute every `[BOOTSTRAP: ...]` marker with concrete values from the stack profile.
+
+The generated target layout is:
+
+```text
+plugins/elephant-goldfish-codex/
+  .codex-plugin/plugin.json
+  commands/
+    eg-brainstorm.md
+    eg-prd.md
+    eg-fix-bug.md
+    eg-new-feature.md
+    eg-precommit-review.md
+```
+
+Specifically:
+
+- `[BOOTSTRAP: lint command]` -> actual command, or remove the bullet if none exists.
+- `[BOOTSTRAP: typecheck command]` -> actual command, or remove the block if no separate typecheck exists.
+- `[BOOTSTRAP: unit test command]`, `[BOOTSTRAP: e2e test command]` -> observed commands.
+- `[BOOTSTRAP: dev server URL]` -> e.g. `http://localhost:3000`.
+- `[BOOTSTRAP: browser validation block]` -> Browser Use / in-app browser for web, simulator/device for mobile, omitted for backend-only.
+- `[BOOTSTRAP: test tier picks]` -> concrete test folder choices in the target.
+- `[BOOTSTRAP: stack-specific Hunt for items]` -> append stack-specific reviewer bullets.
+- `[BOOTSTRAP: project-specific routing note]` -> reference project-specific `eg-` commands if any.
+- `[BOOTSTRAP: commit policy reminder]` -> convention observed in `git log` and repo docs.
+
+Use the Codex tool names in generated commands:
+
+- Fresh goldfish: `spawn_agent` with `fork_context: false` when available.
+- Explorer-style lookups: `agent_type: "explorer"` when available; otherwise default agent.
+- Implementation workers: `agent_type: "worker"` only for explicitly delegated, disjoint implementation slices.
+- Structured user input: `request_user_input` when available; otherwise concise chat questions.
+- Browser validation: Browser Use / in-app browser plugin when available; otherwise a project-appropriate browser, simulator, or CLI fallback.
+
+## Step 3: Register the repo-local plugin
+
+Create or update `.agents/plugins/marketplace.json` so Codex can discover the project-local plugin. Preserve any existing entries and append this entry if missing:
+
+```json
+{
+  "name": "elephant-goldfish-codex",
+  "source": {
+    "source": "local",
+    "path": "./plugins/elephant-goldfish-codex"
+  },
+  "policy": {
+    "installation": "AVAILABLE",
+    "authentication": "ON_INSTALL"
+  },
+  "category": "Coding"
+}
+```
+
+If the marketplace file does not exist, create:
+
+```json
+{
+  "name": "project-local",
+  "interface": {
+    "displayName": "Project Local Plugins"
+  },
+  "plugins": [
+    {
+      "name": "elephant-goldfish-codex",
+      "source": {
+        "source": "local",
+        "path": "./plugins/elephant-goldfish-codex"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Coding"
+    }
+  ]
+}
+```
+
+## Step 4: Update AGENTS.md
+
+Read `codex/agents-md-snippet.md`. Tailor the placeholders to match the target's setup and inject the snippet into `AGENTS.md`.
+
+- If `AGENTS.md` exists, inject near the top after the project overview or existing tool workflow section.
+- If no `AGENTS.md` exists, ask before creating one. Seed it with a project overview placeholder, the snippet, and a short build/test command stub.
+- Do not copy the Claude `CLAUDE.md` section verbatim. Mirror durable project facts only.
+
+## Step 5: Sanity-check the output
+
+For each generated file:
+
+- No `[BOOTSTRAP: ...]` markers remain.
+- The plugin manifest JSON parses.
+- `.agents/plugins/marketplace.json` parses and preserves existing plugins.
+- Commands referenced actually exist in the target.
+- File paths in test-tier picks correspond to real folders where possible.
+- The command prompts still preserve the elephant/goldfish asymmetry: goldfish see only the artifact they need, not the elephant's hidden hypothesis or implementation plan.
+
+## Step 6: Final report
+
+Print to the user:
+
+- Stack profile (confirmed or corrected)
+- Codex plugin files created
+- Marketplace entry status
+- AGENTS.md change
+- Claude files preserved
+- Anything you could not infer
+
+Stop short of committing. The user authorizes the commit when ready.
+
+## Re-bootstrapping
+
+When the user says "re-bootstrap Codex" or "update Codex commands from the template repo," diff against the existing Codex plugin files before overwriting:
+
+- Preserve project-specific edits.
+- Preserve unrelated marketplace entries.
+- Ask before overwriting if a project-specific edit would be lost.
+- Do not touch `.claude/commands/*` or `CLAUDE.md` unless the user explicitly asks to update the Claude adapter too.

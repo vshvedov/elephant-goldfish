@@ -1,0 +1,34 @@
+{
+  "name": "elephant-goldfish-codex",
+  "version": "0.1.0",
+  "description": "Codex-native elephant/goldfish workflow commands for design, implementation, and independent review",
+  "author": {
+    "name": "elephant-goldfish"
+  },
+  "repository": "https://github.com/vshvedov/elephant-goldfish",
+  "license": "MIT",
+  "keywords": [
+    "codex",
+    "workflow",
+    "subagents",
+    "code-review",
+    "prd",
+    "design-doc"
+  ],
+  "interface": {
+    "displayName": "Elephant/Goldfish",
+    "shortDescription": "Structured Codex workflows with fresh goldfish checks",
+    "longDescription": "Adds Codex slash commands for the elephant/goldfish pattern: brainstorm, PRD, bug fix, new feature, and pre-commit independent review. The working Codex session is the elephant; fresh Codex subagents are goldfish.",
+    "developerName": "elephant-goldfish",
+    "category": "Coding",
+    "capabilities": [
+      "Interactive",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Run /elephant-goldfish-codex:eg-precommit-review",
+      "Run /elephant-goldfish-codex:eg-new-feature <feature>",
+      "Run /elephant-goldfish-codex:eg-fix-bug <bug>"
+    ]
+  }
+}
