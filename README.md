@@ -19,12 +19,14 @@ In your target repo, open a Claude Code session and paste this message:
 > `gh api repos/vshvedov/elephant-goldfish/contents/claude/BOOTSTRAP.md -H 'Accept: application/vnd.github.raw'`,
 > then follow the procedure to set up the elephant/goldfish workflow here, preserving any existing setups for other AIs.
 
-When done, reload Claude Code session (restart the app) and try:
+When done, reload Claude Code session (restart the app) and try typing:
 
 ```
-/eg-brainstorm I'm starting a new app...
+/eg-...
 
 ```
+
+You should see the list of all e/g commands.
 
 The root `BOOTSTRAP.md` remains as a compatibility entrypoint for older install snippets, but new Claude installs should fetch `claude/BOOTSTRAP.md` directly.
 
@@ -39,11 +41,13 @@ In the same target repo, open a Codex session and paste this message:
 > `gh api repos/vshvedov/elephant-goldfish/contents/codex/BOOTSTRAP.md -H 'Accept: application/vnd.github.raw'`,
 > then follow the procedure to set up the Codex elephant/goldfish workflow here, preserving any existing setups for other AIs.
 
-When done, you'll have a set of "Elephant/Goldfish" Codex skills. Try this:
+When done, you'll have a set of "Elephant/Goldfish" Codex skills. Try start typing:
 
 ```
 $eg...
 ```
+
+You should see the list of all e/g skills.
 
 ### Gemini CLI (beta)
 
@@ -55,6 +59,20 @@ In your target repo, open a Gemini CLI session and paste this message:
 > Fetch the Gemini CLI elephant-goldfish bootstrap procedure with
 > `gh api repos/vshvedov/elephant-goldfish/contents/gemini/BOOTSTRAP.md -H 'Accept: application/vnd.github.raw'`,
 > then follow the procedure to set up the Gemini CLI elephant/goldfish workflow here, preserving any existing setups for other AIs.
+
+When done, you'll have a set of "Elephant/Goldfish" Gemini CLI skills. Reload first:
+
+```
+/skills reload
+```
+
+Then start typing:
+
+```
+/eg...
+```
+
+You should see the list of all e/g skills.
 
 ---
 
