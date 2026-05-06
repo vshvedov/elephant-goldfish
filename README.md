@@ -35,7 +35,7 @@ When done, reload Claude Code session (restart the app) and start typing:
 
 ```
 
-You should see the list of all e/g commands:
+You should see the list of all `eg-` commands:
 
 <img width="846" height="562" alt="Screenshot 2026-05-05 at 3 13 40 PM" src="https://github.com/user-attachments/assets/eac5740f-71d0-426a-80c9-a71941690d24" />
 
