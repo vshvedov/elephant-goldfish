@@ -31,7 +31,7 @@ PROBLEM DOC
 
 If there is no repro and the bug is not obvious from a single file read, stop and ask for a concrete repro path.
 
-[BOOTSTRAP: browser validation block]
+For UI bugs, use the project-appropriate manual verification path. Prefer Browser Use / the in-app browser for web apps, a simulator/device run for mobile apps, and curl/log/test reproduction for backend-only services. Start or identify the dev server from package scripts, AGENTS.md/CLAUDE.md, or CI docs when needed.
 
 ## Goldfish Diagnosis
 
@@ -42,14 +42,14 @@ Spawn a fresh Codex subagent with `fork_context: false`. Use `agent_type: "explo
 Send only the symptom and repro, not the elephant's hypothesized root cause:
 
 ```text
-Independent diagnosis of a bug in this repo ([BOOTSTRAP: project description]). AGENTS.md and CLAUDE.md may contain architecture notes.
+Independent diagnosis of a bug in this repo. AGENTS.md and CLAUDE.md may contain architecture notes.
 
 Symptom: <FILL IN>
 Repro: <FILL IN>
 
 Investigate. Where is the bug most likely to live? Cite file:line locations. List the top 1-3 candidate root causes ranked by likelihood. For each, name supporting evidence and what would falsify it. Do not propose a fix yet.
 
-[BOOTSTRAP: browser validation note for diagnosis]
+If UI repro is needed, use the project-appropriate browser/simulator path only if available and safe.
 
 End with `diagnosis complete`.
 ```
@@ -60,11 +60,11 @@ Compare the goldfish output to your hypothesis. If it diverges and the goldfish 
 
 Capture the bug as a failing test before fixing.
 
-[BOOTSTRAP: test tier picks]
+Choose the narrowest test tier that captures the bug. Infer test locations and commands from AGENTS.md, CLAUDE.md, package manifests, framework conventions, and CI config.
 
 Run the new test and confirm it fails for the reason in the problem doc. If it fails for a different reason, fix the test before touching implementation.
 
-[BOOTSTRAP: UI repro fallback]
+For UI bugs where a full automated test is disproportionate, capture the repro as a manual verification script in the conversation: navigate, act, screenshot/log/console, and confirm the bug is observable. Re-run it after the fix.
 
 ## Fix
 
@@ -72,7 +72,7 @@ Implement the smallest change that makes the failing test green and matches "Fix
 
 Re-run the failing test. It must pass.
 
-[BOOTSTRAP: post-fix UI verification reminder]
+For UI bugs, re-run the original browser/simulator/manual repro after the code-level fix passes.
 
 ## Review
 
@@ -83,7 +83,7 @@ Use `$eg-precommit-review <bug summary>` or apply the same review procedure from
 Run:
 
 ```sh
-[BOOTSTRAP: test gate commands]
+<derive from AGENTS.md, CLAUDE.md, package manifests, and CI config>
 ```
 
 All required tiers must pass. For UI bugs, re-verify the original repro through Browser Use / in-app browser or simulator.
@@ -100,4 +100,4 @@ Report:
 - Review outcome, including verbatim rebuttals
 - Test gate status
 
-Stop short of staging or committing. [BOOTSTRAP: commit policy reminder]
+Stop short of staging or committing. Follow the commit policy documented in AGENTS.md/CLAUDE.md if the user later asks to commit.

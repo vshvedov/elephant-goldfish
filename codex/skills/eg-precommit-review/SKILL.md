@@ -18,33 +18,29 @@ Run it for everything else.
 Run these checks sequentially, not chained:
 
 ```sh
-[BOOTSTRAP: lint command]
+<derive lint command from AGENTS.md, CLAUDE.md, package manifests, and CI config>
 ```
 
-[BOOTSTRAP: typecheck block — include if separate typechecking exists:
+If the project has a separate typecheck/analyze step, run it:
 ```sh
-[BOOTSTRAP: typecheck command]
-```
-]
-
-```sh
-[BOOTSTRAP: unit test command]
+<derive typecheck/analyze command>
 ```
 
-[BOOTSTRAP: e2e test block — include if E2E exists:
 ```sh
-[BOOTSTRAP: e2e test command]
+<derive focused unit/integration test command>
 ```
-Skip only when the diff is purely [BOOTSTRAP: layers that do not need E2E].
-]
 
-[BOOTSTRAP: code-generation block — include if applicable:
-If the diff modifies [BOOTSTRAP: regeneration trigger], regenerate first:
+If the project has E2E/system tests and the diff touches UI/API/user-visible behavior, run the relevant tier:
 ```sh
-[BOOTSTRAP: codegen command]
+<derive E2E/system test command>
+```
+Skip only when the diff is purely internal logic/config/docs with no observable UI/API behavior.
+
+If the project uses generated code and the diff touches generation inputs, regenerate first:
+```sh
+<derive codegen command>
 ```
 Both source and generated files must be committed together.
-]
 
 New errors introduced by the diff are blockers. Pre-existing failures are out of scope; if needed, baseline against `main` and compare outputs.
 
@@ -83,7 +79,7 @@ Hunt for:
 - Error handling: silent catches, swallowed errors, fallback paths that mask real failures, missing propagation.
 - Performance: N+1 queries, sync work in hot loops, missing memoization, layout thrashing, unbounded growth, missing pagination.
 - Test coverage gaps, especially missing regression tests for bug fixes.
-[BOOTSTRAP: stack-specific Hunt for items]
+- Project-specific gotchas from AGENTS.md/CLAUDE.md and the current stack: auth/scoping, migrations/backfills, generated-code drift, lifecycle/dispose issues, N+1/data loading, async races, platform/browser differences, performance budgets.
 - Project-rule violations from AGENTS.md or CLAUDE.md, with citations.
 - Dead code, leftover debug output, stale comments referencing removed code.
 
@@ -137,4 +133,4 @@ Report:
 - Findings rebutted verbatim
 - Pre-existing lint/typecheck/test failures treated as out of scope
 
-Stop short of staging or committing. [BOOTSTRAP: commit policy reminder]
+Stop short of staging or committing. Follow the commit policy documented in AGENTS.md/CLAUDE.md if the user later asks to commit.

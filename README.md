@@ -83,28 +83,30 @@ You should see the list of all e/g skills:
 
 ---
 
-*The installs are additive. Claude Code gets `.claude/commands/` and `CLAUDE.md`; Codex gets a repo-local plugin with skills, user-skill symlinks for autocomplete, and `AGENTS.md`; Gemini CLI gets local workspace Skills in `.gemini/skills/` plus `GEMINI.md`. They can live in the same repo and should mirror the same project conventions.*
+*The installs are additive. Claude Code gets project-local `.claude/commands/` and `CLAUDE.md`; Codex gets shared user skills installed directly into `${CODEX_HOME:-~/.codex}/skills/`; Gemini CLI gets local workspace Skills in `.gemini/skills/` plus `GEMINI.md`. They can live side by side and should mirror the same workflow conventions.*
 
 ---
 
 ## Adaptive Injection
 
-This repository does not provide static configuration. Instead, it uses **Adaptive Injection**. When you bootstrap a repository:
+For Claude Code and Gemini CLI, this repository uses **Adaptive Injection**. When you bootstrap a repository:
 1. The AI analyzes your **local stack** (languages, frameworks, test runners).
 2. It fetches **generic templates** from this repo.
 3. It **contextualizes** those templates, replacing `[BOOTSTRAP: ...]` markers with your actual project commands.
 
 This ensures that `/eg-fix-bug` in a Rails app knows to run `bundle exec rails test`, while in a Flutter app it runs `flutter test`.
 
+Codex is different: the `eg-*` workflows are shared user skills installed once into `~/.codex/skills`. They inspect the current repo at runtime instead of being rewritten for each project. That avoids one project's bootstrap overwriting another project's global Codex skills.
+
 ## Keeping Up to Date
 
-Since your local commands are customized, you can't simply overwrite them when this repository updates. To sync the latest logic while preserving your local configuration:
+Since Claude/Gemini local commands are customized, you can't simply overwrite them when this repository updates. To sync the latest logic while preserving your local configuration:
 
 1. Open [PROMPTS.md](./PROMPTS.md).
 2. Copy the **"Update Elephant/Goldfish Patterns"** prompt.
 3. Paste it into your AI agent (Claude, Gemini, or Codex) inside your bootstrapped project.
 
-The AI will fetch the latest templates, identify your local adaptations, and perform a "smart merge" to bring in new workflow improvements without breaking your local build commands.
+The AI will fetch the latest templates, identify your local adaptations, and perform a "smart merge" to bring in new workflow improvements without breaking your local build commands. For Codex, rerun the Codex bootstrap to refresh the shared `~/.codex/skills/eg-*` directories.
 
 ---
 
@@ -120,7 +122,7 @@ Five workflow commands/skills for each agent:
 | New feature | `/eg-new-feature` | `Use $eg-new-feature ...` | `eg-new-feature` Skill |
 | Precommit review | `/eg-precommit-review` | `Use $eg-precommit-review ...` | `eg-precommit-review` Skill |
 
-All bootstraps inspect the target stack and customize the generic templates for the detected language, test tiers, browser/simulator validation path, project-specific review gotchas, and commit convention. See [Bootstrap a new repo](#bootstrap-a-new-repo) below for the full procedure.
+Claude and Gemini bootstraps inspect the target stack and customize local templates for the detected language, test tiers, browser/simulator validation path, project-specific review gotchas, and commit convention. Codex installs shared skills once; those skills inspect the current repo at runtime. See [Bootstrap a new repo](#bootstrap-a-new-repo) below for the full procedure.
 
 ---
 
@@ -216,15 +218,10 @@ The customized commands keep the same shape (problem doc, goldfish, failing test
 After you give Codex the `gh api` instruction, Codex will:
 
 1. Read [codex/BOOTSTRAP.md](codex/BOOTSTRAP.md) for the procedure.
-2. Inspect the target repo's `AGENTS.md`, `CLAUDE.md`, manifests, CI config, and recent commits.
-3. Customize the Codex skill templates in [codex/skills/](codex/skills/) for the detected stack.
-4. Create `<target>/plugins/elephant-goldfish-codex/` with `.codex-plugin/plugin.json` and the five skill folders.
-5. Register the project-local plugin in `<target>/.agents/plugins/marketplace.json`.
-6. Register that local marketplace with Codex using `codex plugin marketplace add <target-root>`.
-7. Enable the plugin in `~/.codex/config.toml` as `elephant-goldfish-codex@<repo-slug>-local`.
-8. Symlink the skills into `${CODEX_HOME:-~/.codex}/skills/eg-*` so `$eg` autocomplete works in current Codex app builds.
-9. Inject the "Working with Codex (elephant/goldfish)" section ([codex/agents-md-snippet.md](codex/agents-md-snippet.md)) into `AGENTS.md`.
-10. Print a summary and remind you to start a new Codex session or reload the app if `$eg` autocomplete has not refreshed.
+2. Install the shared Codex skill folders from [codex/skills/](codex/skills/) directly into `${CODEX_HOME:-~/.codex}/skills/eg-*` as real directories.
+3. Replace old project-local symlinks if present, while preserving unrelated user skills.
+4. Optionally inject the "Working with Codex (elephant/goldfish)" section ([codex/agents-md-snippet.md](codex/agents-md-snippet.md)) into the current project's `AGENTS.md`.
+5. Print a summary and remind you to start a new Codex session or reload the app if `$eg` autocomplete has not refreshed.
 
 After you give Gemini CLI the `gh api` instruction, it will:
 
@@ -236,7 +233,7 @@ After you give Gemini CLI the `gh api` instruction, it will:
 6. Inject the "Working with Gemini CLI" snippet into `GEMINI.md`.
 7. Print a summary and remind you to run `/skills reload` to activate them.
 
-All bootstraps explicitly preserve other agents' existing files (e.g. Codex preserves `.claude/`, Gemini preserves both).
+All bootstraps explicitly preserve other agents' existing files. Codex does not create project-local plugin or marketplace files.
 
 ---
 
@@ -246,7 +243,7 @@ Some projects need a stack-specific verb the generic workflows don't cover — f
 
 Pattern:
 
-1. Copy `eg-new-feature.md` from the relevant target adapter as the starting shape: `.claude/commands/` for Claude Code, `plugins/elephant-goldfish-codex/skills/eg-new-feature/SKILL.md` for Codex, or `.gemini/skills/` for Gemini CLI.
+1. Copy `eg-new-feature.md` from the relevant target adapter as the starting shape: `.claude/commands/` for Claude Code, `${CODEX_HOME:-~/.codex}/skills/eg-new-feature/SKILL.md` for Codex, or `.gemini/skills/` for Gemini CLI.
 2. Tailor: replace the design rubric with the project-specific recipe (the architectural invariants, the canonical "how to add one of these" steps from `CLAUDE.md` / `AGENTS.md` / `GEMINI.md`, the verification path).
 3. Add a `Routing` note at the top of the generic new-feature command or skill so users and agents know when to switch.
 

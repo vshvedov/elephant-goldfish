@@ -12,10 +12,10 @@ There is an update available for the elephant/goldfish workflow. Please sync thi
 1. **Fetch Upstream:** Go to https://github.com/vshvedov/elephant-goldfish.
 2. **Identify Adapter:** Identify which agent I am (Claude Code, Gemini CLI, or Codex) and read the corresponding `BOOTSTRAP.md` in the upstream repo.
 3. **Compare & Merge:**
-   - Read my local command/skill files (e.g., in `.claude/commands/`, `.gemini/skills/`, or `plugins/`).
-   - Identify the stack-specific values I previously filled in (commands for linting, testing, dev URLs, etc.).
+   - Read my local command/skill files. Claude uses `.claude/commands/`; Gemini uses `.gemini/skills/`; Codex uses shared user skills in `${CODEX_HOME:-~/.codex}/skills/eg-*`.
+   - For Claude/Gemini, identify the stack-specific values I previously filled in (commands for linting, testing, dev URLs, etc.).
    - Fetch the NEW templates from upstream and merge the new logic/steps into my local files.
-   - **Constraint:** Do NOT revert my concrete stack commands back to `[BOOTSTRAP]` markers; keep the local implementations.
+   - **Constraint:** For Claude/Gemini, do NOT revert my concrete stack commands back to `[BOOTSTRAP]` markers; keep the local implementations. For Codex, keep the shared skills project-agnostic so they inspect the current repo at runtime.
 4. **Update Snippet:** Update the `CLAUDE.md`, `GEMINI.md`, or `AGENTS.md` snippet if the upstream version has improved.
 5. **Report:** Summarize what new features or logic steps were added and confirm that local test/lint commands were preserved.
 ```

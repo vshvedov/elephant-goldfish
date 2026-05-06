@@ -109,7 +109,7 @@ Ask the user whether to:
 - Save the brief and stop
 - Drop it
 
-If saving, write to `[BOOTSTRAP: brainstorm save path]` only after user confirmation.
+If saving, infer a project-appropriate path at runtime. Prefer `docs/eg-brainstorms/<slug>-<YYYY-MM-DD>.md` when the repo has a `docs/` tree; otherwise use `notes/eg-brainstorms/<slug>-<YYYY-MM-DD>.md`. Ask before writing.
 
 ## Final Report
 

@@ -17,7 +17,7 @@ Ask:
 
 1. Depth: lightweight, standard, or comprehensive.
 2. Research scope: none, web search only, or web plus Browser Use / in-app browser for gated sources.
-3. Output target: save to `[BOOTSTRAP: prd save path]`, print/chat only, hand off to new-feature, save durable nuggets to AGENTS.md.
+3. Output target: save to a project-appropriate PRD path, print/chat only, hand off to new-feature, save durable nuggets to AGENTS.md.
 
 ## Codebase Grounding
 
@@ -117,7 +117,7 @@ Ask whether the PRD is approved, needs specific section revisions, should restar
 
 If approved, apply the selected output targets:
 
-- Save PRD to `[BOOTSTRAP: prd save path]` if selected.
+- Save PRD if selected. Infer the path at runtime: prefer an existing PRD/spec directory such as `docs/prds/`, `docs/specs/`, `prd/`, or a path documented in AGENTS.md/CLAUDE.md; otherwise use `docs/prds/<slug>-<YYYY-MM-DD>.md` when `docs/` exists, or `notes/prds/<slug>-<YYYY-MM-DD>.md`.
 - Persist only durable cross-cutting nuggets to AGENTS.md if selected; show the diff before applying.
 - Print the exact `Use $eg-new-feature to build <summary>` handoff prompt if selected.
 
@@ -133,4 +133,4 @@ Report:
 - Output location
 - Next action
 
-Stop short of staging or committing. [BOOTSTRAP: commit policy reminder]
+Stop short of staging or committing. Follow the commit policy documented in AGENTS.md/CLAUDE.md if the user later asks to commit.
