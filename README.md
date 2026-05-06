@@ -8,11 +8,11 @@ A reusable workflow for software work with Claude Code, Codex, and Gemini CLI, b
 
 ## Why?
 
-Most of the AI agents are working fine today. Some of them better than others. Why should you use Elephant/Goldfish anyway? It's an easy answer: you can hire a Junior Developer and a Staff Engineer. Both will be producing the code. The only difference is the kind of code and architecture you end up with.
+Most of the AI agents are working fine today. Some of them better than others. Why have you added something to a verified workflow? 
 
-Using the commands allows you to efficiently close the gap in your thinking and provide the model's expertise before the code writing starts, while you're in control. The Elephant/Goldfish approach allows the AI to validate your ideas and its own ideas, stay in contact with you, and stay up to date on the requirements.
+> There's an easy answer. Imagine this: You're a manager, and you have two hires: a Junior Developer and a Senior Staff Engineer. Both will be producing the code. The only difference is the kind of code and architecture you end up with. On one hand, this approach allows you to efficiently close the gap in your thinking and leverage the model's expertise before code writing begins, while you're in control. On the other hand, the Elephant/Goldfish pattern allows the AI to validate its own ideas, stay in contact with you, and stay up to date on the requirements.
 
-> This way, you're shifting the pipeline from "write me the code" to "think about what I missed, use a second opinion, collaborate, then write and test after".
+> You're shifting the pipeline from "write me the code" to "think about what I missed, use a second opinion, collaborate, then write and test after".
 
 The price is the higher token consumption and longer irrational work. Be warned.
 
