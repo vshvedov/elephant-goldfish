@@ -13,7 +13,7 @@ Using the commands allows you to efficiently close the gap in your thinking and 
 
 > This way, you're shifting the pipeline from "write me the code" to "think about what I missed, use a second opinion, collaborate, then write".
 
-The price is higher for token consumption and irrational work. Be warned.
+The price is the higher token consumption and longer irrational work. Be warned.
 
 ## How to install
 
