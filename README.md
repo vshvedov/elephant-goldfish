@@ -51,7 +51,7 @@ The root `BOOTSTRAP.md` remains as a compatibility entrypoint for older install 
 
 In the same target repo, open a Codex session and paste this message:
 
-```markdown
+```
 Fetch the Codex elephant-goldfish bootstrap procedure with
 `gh api repos/vshvedov/elephant-goldfish/contents/codex/BOOTSTRAP.md -H 'Accept: application/vnd.github.raw'`,
 then follow the procedure to set up the Codex elephant/goldfish workflow here, preserving any existing setups for other AIs.
