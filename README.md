@@ -189,7 +189,7 @@ You don't have to start at the top. Pick the stage that matches what you have:
 
 **`eg-prd`** uses two waves of goldfish. First, exploration goldfish ground the request in the existing codebase. Then, after structured gap-filling Q&A with the user, research goldfish run in parallel across distinct lenses. The elephant synthesizes a PRD with explicit Open Questions for whatever the user deferred.
 
-**`eg-new-feature`** uses one goldfish to stress-test the design doc the elephant drafted. If the goldfish can't implement the same thing from the doc alone, the doc gets revised. Implementation only starts after the doc is "design ready." Then the same diff goes through `eg-precommit-review`.
+**`eg-new-feature`** uses three goldfish per round to stress-test the design doc the elephant drafted, mirroring the article's full design-stage protocol: comprehension (does the doc read cleanly to a cold reader?), critic (what gaps?), and readiness (could a first-pass implementer ship this without asking any questions?). A round passes only when both critic and readiness sign off; comprehension is informational. Round 2+ skips comprehension. Implementation only starts after the doc passes both gates. Then the same diff goes through `eg-precommit-review`.
 
 **`eg-fix-bug`** uses one goldfish to diagnose the bug from only the symptom and repro. The elephant's hypothesis stays hidden until after the goldfish reports — convergence buys confidence; divergence is signal. The bug gets captured as a failing test before any fix is written.
 

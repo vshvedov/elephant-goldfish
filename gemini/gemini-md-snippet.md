@@ -17,7 +17,7 @@ These are activated contextually based on your intent, but you can explicitly tr
 | Early-stage concept design | "Let's run `eg-brainstorm` for <rough idea>" | Multiple goldfish in parallel generate divergent ideas. All questions via `ask_user`. Hands off to `eg-prd` or `eg-new-feature`. |
 | Product Requirements Doc | "Let's write an `eg-prd` for <feature>" | Codebase grounding → structured gap-filling → deep research with parallel goldfish → synthesized PRD. Saves to `[BOOTSTRAP: prd path, e.g. `docs/prds/`]`. |
 | Bug fix flow | "Run `eg-fix-bug` for <description \| #issue>" | Bug fix flow: problem doc → goldfish diagnosis check → failing test → fix → `eg-precommit-review` → test gate. |
-| Feature flow | "Run `eg-new-feature` for <description>" | Feature flow: scope confirm → design doc → goldfish design check → implement → `eg-precommit-review` → test gate. [BOOTSTRAP: one-line summary of stack-specific design rubric items.] |
+| Feature flow | "Run `eg-new-feature` for <description>" | Feature flow: scope confirm → design doc → three-goldfish design check (comprehension + critic + readiness) → implement → `eg-precommit-review` → test gate. [BOOTSTRAP: one-line summary of stack-specific design rubric items.] |
 | Independent review | "Run `eg-precommit-review`" | Local independent-review loop on the pending diff ([BOOTSTRAP: pre-flight summary]). |
 
 You provide a brief instruction; Gemini writes the doc back at you. Examples:

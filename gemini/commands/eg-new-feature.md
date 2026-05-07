@@ -40,13 +40,45 @@ DESIGN DOC
 
 For UI work, sketch the visual structure in plain text or pseudo-JSX.
 
-## Step 2: Goldfish design check
+## Step 2: Three-goldfish design check
 
-Spawn a fresh agent using `invoke_agent` (`agent_name="generalist"`):
+Run the article's full design-stage protocol: three sequential `invoke_agent` calls per round (or two on revisions — see below), each with no prior context. The combined gate is "ready iff critic AND readiness both sign off"; comprehension is informational.
 
-The goldfish gets ONLY the design doc (no chat history, no implementation intent). Its job is to find holes in the doc — not to implement.
+Each pass uses `agent_name="generalist"` and gets ONLY the design doc (no chat history, no implementation intent, no other passes' output). The asymmetry is the value.
 
-**Prompt body to send (between markers, exclusive):**
+**Round 1 runs all three passes; round 2+ skips comprehension** (revisions are gap-driven, not structural — once the doc reads cleanly, it almost always still reads cleanly). On every round, run critic and readiness.
+
+### Pass A — Comprehension (round 1 only)
+
+Verifies the doc reads cleanly to a cold reader.
+
+```
+<<<COMPREHENSION_START>>>
+You are a fresh reader with no prior context. Below is a design doc for a feature in the [BOOTSTRAP: project name + one-sentence description] repo. Do NOT critique it yet. Your job is to verify the doc reads clearly to someone who walks in cold.
+
+Output two short sections in this order:
+
+## What this feature does
+2-5 sentences in your own words. The user-visible change. Who triggers it, when, what they get back.
+
+## How the existing system works (per the doc)
+2-5 sentences summarizing the current behavior the doc describes touching. Surfaces, controllers, components, message flow — whatever the doc references.
+
+End your output with EXACTLY one of these closing lines, on its own line:
+- comprehension passed       (the doc reads cleanly; no ambiguous sections)
+- comprehension unclear      (one or more sections are too vague to paraphrase)
+
+If you mark it unclear, list the ambiguous sections by heading before the closing line. Do NOT critique architecture choices here — that is the critic's job. Only flag things you genuinely cannot understand.
+
+DESIGN DOC:
+
+<PASTE FULL DESIGN DOC FROM STEP 1 HERE>
+<<<COMPREHENSION_END>>>
+```
+
+### Pass B — Critic (every round)
+
+Finds gaps that block implementation.
 
 ```
 <<<DESIGN_START>>>
@@ -72,9 +104,44 @@ Output: numbered list of gaps, with file:line citations where applicable. End wi
 <<<DESIGN_END>>>
 ```
 
-**Triage the gaps.** Each gap is either: addressed in a doc revision, or rebutted with a verbatim reason citing GEMINI.md or the user's words. Print the revised doc back to the user once gaps are closed.
+### Pass C — Readiness (every round)
 
-If the goldfish flags real gaps three times in a row, the feature is under-specified — **stop and ask the user** for more direction via `ask_user`.
+Stricter than the critic: not "is the design good?" but "is the design _executable_ in one pass?"
+
+```
+<<<READINESS_START>>>
+You are a fresh implementer with no prior context. Below is a design doc for a feature in the [BOOTSTRAP: project name + one-sentence description] repo. Imagine you've been told: "Implement this. First pass. No follow-up questions allowed." Could you?
+
+For every interface, file path, function signature, API request/response shape, DB column, queue argument, component prop, message type, and verification criterion the doc claims, ask:
+- Could I write the corresponding code without asking the author anything?
+- Could I verify it works without asking what "works" means?
+- Are the cited files and line numbers concrete enough that I'd open the right file and edit the right region?
+
+Output a numbered list of EVERY question you would have to ask the author before you could ship. For each:
+- The question itself, one sentence.
+- The section of the doc that should have answered it but didn't.
+
+If the list is empty, say "No open questions."
+
+End with EXACTLY one of these closing lines, on its own line:
+- implementation ready       (zero open questions; first-pass implementable)
+- implementation not ready   (one or more open questions remain)
+
+A design can be beautiful and still fail this gate. The critic asks "is the design good?"; you ask "is the design executable?".
+
+DESIGN DOC:
+
+<PASTE FULL DESIGN DOC FROM STEP 1 HERE>
+<<<READINESS_END>>>
+```
+
+### Triage and loop
+
+A round is **ready** iff Pass B closes with `design ready` AND Pass C closes with `implementation ready`. Comprehension is informational: log it, surface it to the user, but do not gate progress on it. If comprehension returns `comprehension unclear` AND the round is otherwise ready, still proceed — but flag in the final report that the doc was unclear in places.
+
+If a round is **not ready**, bundle the critic gaps and readiness open questions (and comprehension feedback if it returned unclear) into a single revise prompt with section labels (`=== CRITIC GAPS ===`, `=== READINESS OPEN QUESTIONS ===`, `=== COMPREHENSION FEEDBACK ===`). Tell the elephant to address EVERY numbered gap across BOTH the CRITIC GAPS and READINESS OPEN QUESTIONS sections — do not collapse or skip because the numbering restarts. Each gap is either: addressed in a doc revision, or rebutted with a verbatim reason citing GEMINI.md or the user's words. Print the revised doc back to the user once both gates close.
+
+Then re-run Pass B and Pass C against the revised doc (skip Pass A — see above). If the round still does not converge after **three revisions**, the feature is under-specified — **stop and ask the user** for more direction via `ask_user`.
 
 ## Step 3: Implementation plan
 

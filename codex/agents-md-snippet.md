@@ -13,7 +13,7 @@ The elephant/goldfish Codex workflows are installed as global user skills under 
 | `$eg-brainstorm <rough idea>` | Early-stage concept design. Multiple fresh goldfish run in parallel with different lenses, then the elephant synthesizes a concepts brief. |
 | `$eg-prd <idea \| feature description>` | Build a PRD from a rough idea: codebase grounding, gap-filling, optional research, and synthesized requirements. Infers a project-appropriate save path when requested. |
 | `$eg-fix-bug <description \| #issue \| URL>` | Bug fix flow: problem doc, independent diagnosis, failing regression test, fix, review, and test gate. |
-| `$eg-new-feature <description \| #issue \| URL>` | Feature flow: scope confirmation, design doc, goldfish design check, implementation, review, and test gate. Reads AGENTS.md/CLAUDE.md and repo manifests for project guardrails. |
+| `$eg-new-feature <description \| #issue \| URL>` | Feature flow: scope confirmation, design doc, three-goldfish design check (comprehension + critic + readiness), implementation, review, and test gate. Reads AGENTS.md/CLAUDE.md and repo manifests for project guardrails. |
 | `$eg-precommit-review [focus]` | Local independent-review loop over pending changes, with pre-flight checks and a fresh reviewer that sees the diff cold. |
 Question discipline: use Codex structured user input when available; otherwise ask concise, targeted chat questions. Do not replace structured choices with open-ended prompts when the answer is enumerable.
 
