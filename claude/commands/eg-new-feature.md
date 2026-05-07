@@ -57,6 +57,14 @@ DESIGN DOC
 
 For UI work, sketch the visual structure in plain text or pseudo-JSX. If the design needs a real visual reference, ask the user to point at an existing component to mirror.
 
+### No-code gate
+
+**Do NOT edit, write, scaffold, or refactor code until BOTH Pass B (Critic) AND Pass C (Readiness) in Step 2 close with their ready tokens (`design ready` + `implementation ready`).** Article rule, paraphrased: *"I do not want you to create code. We are not going to create code. Resist your impulse."* This holds until the design doc passes both gates — even if the user asks to skip ahead, even if the change "looks trivial", even if it is "just one line".
+
+If the user explicitly asks to skip the gate ("just write the code", "skip the design doc", etc.), restate the gate, name the still-open passes, and require an explicit override ("yes, override the no-code gate") before touching any file outside the design doc itself. The exception is `/eg-fix-bug` for trivial fixes covered by its own Step 0 triviality gate — that is a separate command with a separate gate.
+
+The design doc itself, test names mentioned in chat (not yet on disk), and read-only exploration (`Read`, `Grep`, `Bash` for `git status` / `git log` / `git diff`, [BOOTSTRAP: any other read-only inspection commands the stack uses, e.g. `bundle exec rails routes`, `flutter analyze --no-pub`, etc.]) are NOT code edits and are permitted.
+
 ## Step 2: Three-goldfish design check
 
 Run the article's full design-stage protocol: three sequential `Agent` calls per round (or two on revisions — see below), each with no prior context. The combined gate is "ready iff critic AND readiness both sign off"; comprehension is informational.
@@ -196,6 +204,8 @@ Once the design doc is `design ready`, write a short ordered implementation plan
 For trivial features (single-component change), skip this step.
 
 ## Step 4: Implement
+
+**Pre-flight check before any code edit:** confirm Step 2 closed both Pass B (Critic) AND Pass C (Readiness). If either is still open, the no-code gate from Step 1 still applies — return to Step 2 instead of proceeding.
 
 Follow the plan. After each layer, briefly verify before moving on:
 

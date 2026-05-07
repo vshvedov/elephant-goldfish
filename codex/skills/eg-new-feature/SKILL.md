@@ -36,6 +36,14 @@ DESIGN DOC
 
 For UI work, sketch the structure in plain text or pseudo-JSX. If a visual reference is needed, ask for the existing component or screen to mirror.
 
+### No-Code Gate
+
+**Do NOT edit, write, scaffold, or refactor code until BOTH Pass B (Critic) AND Pass C (Readiness) in the next section close with their ready tokens (`design ready` + `implementation ready`).** Article rule, paraphrased: *"I do not want you to create code. We are not going to create code. Resist your impulse."* This holds until the design doc passes both gates — even if the user asks to skip ahead, even if the change "looks trivial", even if it is "just one line".
+
+If the user explicitly asks to skip the gate ("just write the code", "skip the design doc", etc.), restate the gate, name the still-open passes, and require an explicit override ("yes, override the no-code gate") before any file write. The exception is the `$eg-fix-bug` skill for trivial fixes covered by its own triviality gate.
+
+The design doc itself, test names mentioned in chat (not yet on disk), and read-only exploration (file reads, `git status` / `git log` / `git diff`, route/schema inspection) are NOT code edits and are permitted.
+
 ## Three-Goldfish Design Check
 
 The user invoked this skill, so fresh design-check subagents are explicitly authorized.
@@ -132,6 +140,8 @@ If a round is **not ready**, bundle the critic gaps and readiness open questions
 Then re-run Pass B and Pass C against the revised doc (skip Pass A — see above). If the round still does not converge after three revisions, stop and ask the user for more direction.
 
 ## Implementation
+
+**Pre-flight check before any code edit:** confirm the previous section closed both Pass B (Critic) AND Pass C (Readiness). If either is still open, the No-Code Gate from the Design Doc section still applies — return to the design check instead of proceeding.
 
 Once the design is `design ready`, write a short ordered implementation plan.
 
