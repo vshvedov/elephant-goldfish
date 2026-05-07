@@ -1,0 +1,21 @@
+{
+  "name": "elephant-goldfish",
+  "description": "Five-stage workflow for software work with Claude Code, built around the elephant/goldfish pattern: a fresh subagent (the goldfish) stress-tests a problem doc, design doc, or diff while your context-rich session (the elephant) stays in the loop. Stages: brainstorm → PRD → fix-bug / new-feature → precommit-review.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Vladyslav Shvedov",
+    "url": "https://github.com/vshvedov"
+  },
+  "repository": "https://github.com/vshvedov/elephant-goldfish",
+  "homepage": "https://github.com/vshvedov/elephant-goldfish",
+  "license": "MIT",
+  "keywords": [
+    "workflow",
+    "code-review",
+    "prd",
+    "brainstorm",
+    "agent",
+    "subagent",
+    "elephant-goldfish"
+  ]
+}
