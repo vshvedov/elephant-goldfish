@@ -215,6 +215,263 @@ You give a one-liner; the agent writes the doc back at you. **You don't author d
 
 ---
 
+## Workflows
+
+Each command structures a different elephant↔goldfish dance. The diagrams below show the message flow for each. The **elephant** is your working session — full context, institutional memory. A **goldfish** is a fresh subagent spawned with no shared context, receiving only what the elephant hands it. The **user** is you, kept in the loop via structured questions (`AskUserQuestion`) at decision points.
+
+### `eg-brainstorm`
+
+**Inverts the pattern.** Instead of one goldfish stress-testing the elephant, multiple goldfish run in **parallel**, each on a different lens (technical, business, UX, contrarian, market research). Their lack of shared context is what makes them generate divergent ideas. The elephant synthesizes the divergent output into a concepts brief and helps the user converge on a direction.
+
+**Output:** a clusters → ranked picks → open questions brief; optional handoff to `/eg-new-feature`.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant U as User
+    participant E as Elephant
+    participant G1 as Goldfish (Technical)
+    participant G2 as Goldfish (Business)
+    participant G3 as Goldfish (UX)
+    participant Gn as Goldfish (Contrarian/Market)
+    participant GC as Contrarian sweep
+
+    U->>E: rough idea
+    E->>U: Q1 stage / Q2 breadth / Q3 web research
+    U->>E: framing answers
+    E->>U: SEED (problem statement)
+    U->>E: approve / refine / restart
+
+    par Divergent lenses (parallel)
+        E->>G1: SEED + Technical lens
+        E->>G2: SEED + Business lens
+        E->>G3: SEED + UX lens
+        E->>Gn: SEED + Contrarian/Market lens
+    end
+    G1-->>E: concepts (lens complete)
+    G2-->>E: concepts (lens complete)
+    G3-->>E: concepts (lens complete)
+    Gn-->>E: concepts (lens complete)
+
+    opt Breadth = ~10 / ~20
+        E->>GC: SEED + dedup'd concepts ("what did they all miss?")
+        GC-->>E: 2-3 outsider concepts
+    end
+
+    E->>E: cluster, rank, surface convergence/divergence
+    E->>U: CONCEPTS BRIEF + ranked picks
+    U->>E: pick / re-run / save / drop
+    opt Handoff
+        E-->>U: "Run /eg-new-feature <concept> when ready"
+    end
+```
+
+---
+
+### `eg-prd`
+
+**Two waves of goldfish.** Wave 1 grounds the request in the existing codebase (parallel exploration goldfish). Wave 2 — after structured gap-filling Q&A with the user — runs research goldfish in parallel across distinct lenses. The elephant synthesizes a PRD with explicit Open Questions for whatever the user deferred.
+
+**Output:** a PRD (executive summary, scope, requirements, metrics, risks, open questions, sources); optional save to disk and/or handoff to `/eg-new-feature`.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant U as User
+    participant E as Elephant
+    participant GA as Goldfish (Existing surfaces)
+    participant GB as Goldfish (Architecture)
+    participant R1 as Goldfish (Market/Prior art)
+    participant R2 as Goldfish (Technical patterns)
+    participant R3 as Goldfish (UX/Compliance/Perf)
+
+    U->>E: idea or #issue
+    E->>U: Q1 depth / Q2 research / Q3 output target
+    U->>E: framing answers
+
+    par Wave 1 — codebase grounding
+        E->>GA: find closest existing surfaces
+        E->>GB: read CLAUDE.md, manifests, conventions
+    end
+    GA-->>E: file:line citations
+    GB-->>E: stack, constraints, patterns
+    E->>U: CODEBASE BRIEF + numbered gap list (G1..Gn)
+
+    U->>E: which gaps to fill
+    loop For each selected gap
+        E->>U: structured Q (3-5 plausible answers + Defer/Other)
+        U->>E: answer or defer
+    end
+
+    par Wave 2 — research lenses (parallel)
+        E->>R1: SEED + brief + answered gaps (Market lens)
+        E->>R2: SEED + brief + answered gaps (Technical lens)
+        E->>R3: SEED + brief + answered gaps (UX/Compliance lens)
+    end
+    R1-->>E: findings + sources (lens complete)
+    R2-->>E: findings + sources (lens complete)
+    R3-->>E: findings + sources (lens complete)
+
+    E->>E: synthesize PRD (deferred gaps → Open Questions)
+    E->>U: full PRD
+    U->>E: approve / refine sections / restart
+    opt Output
+        E->>E: write to disk / memory
+        E-->>U: "Run /eg-new-feature <summary> when ready"
+    end
+```
+
+---
+
+### `eg-new-feature`
+
+**Three goldfish per round** stress-test the design doc the elephant drafted. Comprehension (does the doc read cleanly to a cold reader?), Critic (what gaps?), Readiness (could a first-pass implementer ship this without asking any questions?). A **no-code gate** holds until BOTH Critic and Readiness sign off (`design ready` + `implementation ready`). Round 2+ skips Comprehension. Implementation only starts after the gate closes; then the diff goes through `/eg-precommit-review`.
+
+**Output:** implemented + reviewed code, ready for the user to commit.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant U as User
+    participant E as Elephant
+    participant PA as Goldfish A (Comprehension)
+    participant PB as Goldfish B (Critic)
+    participant PC as Goldfish C (Readiness)
+    participant PR as /eg-precommit-review
+
+    U->>E: feature description or #issue
+    E->>U: scope confirmation (1-2 sentences)
+    U->>E: confirm / correct
+    E->>U: DESIGN DOC (no code yet — gate is closed)
+
+    rect rgb(245,245,245)
+    Note over E,PC: Round 1 — all three passes
+    par Three-goldfish design check
+        E->>PA: design doc only (cold reader paraphrase)
+        E->>PB: design doc only (find gaps)
+        E->>PC: design doc only (executable in one pass?)
+    end
+    PA-->>E: "comprehension passed/unclear"
+    PB-->>E: gaps + "design ready" or "design needs revision"
+    PC-->>E: open questions + "implementation ready" or "not ready"
+    end
+
+    alt Both Critic & Readiness sign off
+        Note over E: Gate opens — implementation allowed
+    else Gaps remain
+        loop Up to 3 revisions (skip Pass A)
+            E->>E: revise doc, address every gap or rebut verbatim
+            E->>U: revised doc
+            par
+                E->>PB: revised doc
+                E->>PC: revised doc
+            end
+            PB-->>E: gaps / design ready
+            PC-->>E: questions / implementation ready
+        end
+        opt Still not converging
+            E->>U: stop — feature under-specified, need direction
+        end
+    end
+
+    E->>E: implementation plan (layer-ordered)
+    E->>E: implement layer by layer with per-layer verification
+    E->>PR: hand off diff for independent review
+    PR-->>E: rounds, fixes, rebuttals
+    E->>E: run test gate + UI walkthrough (golden + edge case)
+    E->>U: final report (STOP — no commit)
+```
+
+---
+
+### `eg-fix-bug`
+
+**One goldfish diagnoses the bug** from only the symptom + repro. The elephant's hypothesis stays hidden until after the goldfish reports — convergence buys confidence; divergence is signal worth investigating. The bug gets captured as a **failing test before any fix is written**. Then the same diff goes through `/eg-precommit-review`.
+
+**Output:** failing-test-driven fix, ready for the user to commit.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant U as User
+    participant E as Elephant
+    participant GD as Goldfish (Diagnosis)
+    participant PR as /eg-precommit-review
+
+    U->>E: bug description / #issue / URL
+    opt Triviality gate (typo, formatter, version bump)
+        E->>PR: skip ceremony, go straight to review
+    end
+
+    E->>E: PROBLEM DOC (symptom, repro, hidden hypothesis, "fixed means")
+    opt No repro provided
+        E->>U: ask for repro path (URL, steps, log line)
+        U->>E: repro details
+    end
+
+    Note over E,GD: Asymmetry: goldfish gets symptom + repro only,<br/>NOT the elephant's hypothesised root cause
+    E->>GD: investigate, rank candidate root causes (no fix)
+    GD-->>E: top 1-3 candidates with file:line + falsifying evidence
+
+    alt Convergence (goldfish matches elephant's hypothesis)
+        Note over E: Proceed with confidence
+    else Divergence
+        E->>E: re-investigate; update problem doc if goldfish is right
+        E->>U: surface "goldfish flagged a different root cause"
+    end
+
+    E->>E: write failing test capturing the bug
+    E->>E: run test — must fail for the right reason
+    E->>E: smallest fix that turns it green (no adjacent refactors)
+    E->>E: re-run test — must go green
+
+    E->>PR: hand off diff
+    PR-->>E: rounds, fixes, rebuttals
+    E->>E: test gate + re-verify original repro
+    E->>U: final report (root cause, fix, test, goldfish agreement) — STOP
+```
+
+---
+
+### `eg-precommit-review`
+
+**The reviewer is itself a goldfish.** It sees only the diff, not the conversation, not the implementation intent, not what the elephant was trying to do. Findings are triaged round by round: **fix or rebut verbatim** (no silent dismissals). The loop runs until `no findings` AND every prior-round finding is settled, with a **hard cap of 5 rounds** and structured user escalation if it doesn't converge.
+
+**Output:** a reviewer-cleared diff with every rebuttal surfaced verbatim to the user.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant U as User
+    participant E as Elephant
+    participant GR as Goldfish (Reviewer)
+
+    Note over E: Pre-flight: lint, typecheck, unit, e2e, codegen<br/>(sequential, not chained — new errors only are blockers)
+
+    rect rgb(245,245,245)
+    Note over E,GR: Loop — hard cap 5 rounds
+    loop Round N
+        E->>GR: EXACT template (no intent leakage) + focus area if any
+        Note over GR: Reads git status / diff / diff --cached /<br/>diff main...HEAD / log; reads touched files in full
+        GR-->>E: numbered findings (file:line + why + fix) OR "no findings"
+        E->>E: triage each finding — fix or rebut verbatim
+        E->>U: ledger — open findings going into round N+1
+        opt All settled AND "no findings"
+            Note over E: Exit loop
+        end
+    end
+    end
+
+    alt Hit 5-round cap or repeat finding at same file:method
+        E->>U: AskUserQuestion — accept / keep working / abandon
+        U->>E: choice
+    end
+
+    E->>U: final report (rounds, fixes, rebuttals VERBATIM) — STOP, no commit
+```
+
+---
+
 ## Bootstrap a new repo
 
 (See [How to install](#how-to-install) at the top for the one-line invocation.)
