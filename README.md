@@ -413,11 +413,11 @@ sequenceDiagram
     E->>GD: investigate, rank candidate root causes (no fix)
     GD-->>E: top 1-3 candidates with file:line + falsifying evidence
 
-    alt Convergence (goldfish matches elephant's hypothesis)
+    alt Convergence — goldfish matches elephant hypothesis
         Note over E: Proceed with confidence
     else Divergence
-        E->>E: re-investigate; update problem doc if goldfish is right
-        E->>U: surface "goldfish flagged a different root cause"
+        E->>E: re-investigate, update problem doc if goldfish is right
+        E->>U: surface — goldfish flagged a different root cause
     end
 
     E->>E: write failing test capturing the bug
@@ -452,7 +452,7 @@ sequenceDiagram
     Note over E,GR: Loop — hard cap 5 rounds
     loop Round N
         E->>GR: EXACT template (no intent leakage) + focus area if any
-        Note over GR: Reads git status / diff / diff --cached /<br/>diff main...HEAD / log; reads touched files in full
+        Note over GR: Reads git status / diff / diff --cached /<br/>diff main...HEAD / log, reads touched files in full
         GR-->>E: numbered findings (file:line + why + fix) OR "no findings"
         E->>E: triage each finding — fix or rebut verbatim
         E->>U: ledger — open findings going into round N+1
