@@ -20,14 +20,11 @@ The price is the higher token consumption and longer irrational work. Be warned.
 
 ### Claude Code
 
-<img width="200" height="200" alt="claude-ai-200" src="https://github.com/user-attachments/assets/8f0ed03d-55ca-48c6-b1b5-96df712a145e" />
-
-
 <img width="640" height="320" alt="ClaudeFlow-logo" src="https://github.com/user-attachments/assets/caf5b20a-92a5-468f-b03a-6d20257cf4e1" />
 
 ➡️ NEW: [ClaudeFlow](https://github.com/omniprag/claudeflows)
 
-ClaudeFlow is a set of Claude Code skills installed as a plugin. It's a more formal and extended version of the pattern with more commands and optional deeper thinking mode. MIT license, updates via the Claude Plugin Marketplace.
+**ClaudeFlow** is a set of Claude Code skills installed as a plugin. It's a more formal and extended version of the pattern with more commands and optional deeper thinking mode. MIT license, updates via the Claude Plugin Marketplace.
 
 
 In your target repo, open a Claude Code session and paste this message:
@@ -53,9 +50,6 @@ The root `BOOTSTRAP.md` remains as a compatibility entrypoint for older install 
 
 ### Codex (beta)
 
-<img width="200" height="200" alt="codex-color-200" src="https://github.com/user-attachments/assets/4a16e916-2a3d-498e-8d25-4017ab09cefc" />
-
-
 In the same target repo, open a Codex session and paste this message:
 
 ```
@@ -76,9 +70,6 @@ You should see the list of all e/g skills:
 
 
 ### Gemini CLI (beta)
-
-<img width="200" height="200" alt="gemini-200" src="https://github.com/user-attachments/assets/c837370b-d457-4717-ad30-30ea9beca77a" />
-
 
 In your target repo, open a Gemini CLI session and paste this message:
 
