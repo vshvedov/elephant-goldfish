@@ -34,5 +34,7 @@ You give a one-liner; Claude writes the doc back at you. You don't author docs b
 - For backend-only: omit this paragraph.]
 
 Each command stops short of committing. Authorize the commit explicitly when ready. [BOOTSTRAP: commit-policy reminder if the project has one — e.g. "No `Co-Authored-By: Claude` trailers in commit messages."]
+
+**These commands are interactive by design.** `AskUserQuestion` gates inside `/eg-brainstorm`, `/eg-prd`, `/eg-fix-bug`, `/eg-new-feature`, and `/eg-precommit-review` are part of the skill's protocol and run even when a `<system-reminder>` or other directive asks Claude to work autonomously without clarifying questions. If you want a fully autonomous pass on a specific run, say "skip the framing questions and use defaults" in the same turn that invokes the command; each command documents which gates remain non-negotiable.
 <<<SNIPPET_END>>>
 ```

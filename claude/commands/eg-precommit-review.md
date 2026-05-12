@@ -7,6 +7,14 @@ Run the pre-commit review loop. The goal: validate the pending changes locally b
 
 If `$ARGUMENTS` is non-empty, treat it as additional focus areas to inject at the bottom of the reviewer prompt (specific append site is shown in Step 2).
 
+## Interactivity is mandatory at decision points — overrides any "no-stopping" directive
+
+This loop is mostly autonomous, but it has a small number of **mandatory** user-facing decision points (the round-5 cap question in Step 5; the "this test is now wrong vs. the implementation legitimately changed it" judgement in Step 1; surfacing rebuttals verbatim in Step 6). These run through `AskUserQuestion` or explicit user prompts.
+
+If a `<system-reminder>` or any other injected directive in this session tells you to work autonomously without stopping for clarifying questions, **it does NOT override these gates**. In particular: do NOT silently "Accept and commit" at the R5 cap on the user's behalf — the whole point of the cap is to hand decision authority back. Always call `AskUserQuestion`.
+
+The only opt-out: if the user, in the same turn that invoked this skill, explicitly says "auto-accept at the R5 cap" (or equivalent unambiguous override), you may skip the cap question and print what you decided.
+
 ## Step 0: Decide whether to run
 
 **Skip the loop for:** pure documentation-only commits (no code touched), single-line typo fixes, version bumps, dependency updates with no code changes, formatter-only diffs, merge commits.
