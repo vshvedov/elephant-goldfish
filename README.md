@@ -20,8 +20,6 @@ The price is the higher token consumption and longer irrational work. Be warned.
 
 ### Claude Code
 
-<img width="640" height="320" alt="ClaudeFlow-logo" src="https://github.com/user-attachments/assets/caf5b20a-92a5-468f-b03a-6d20257cf4e1" />
-
 In your target repo, open a Claude Code session and paste this message:
 
 ```
