@@ -28,16 +28,14 @@ Fetch the elephant-goldfish bootstrap procedure with
 then follow the procedure to set up the elephant/goldfish workflow here, preserving any existing setups for other AIs.
 ```
 
-When done, reload Claude Code session (restart the app) and start typing:
+When done, reload the Claude Code session (restart the app) and start typing:
 
 ```
 /eg-...
 
 ```
 
-You should see the list of all `eg-` commands:
-
-<img width="846" height="562" alt="Screenshot 2026-05-05 at 3 13 40 PM" src="https://github.com/user-attachments/assets/eac5740f-71d0-426a-80c9-a71941690d24" />
+You should see the list of all `eg-` commands.
 
 The root `BOOTSTRAP.md` remains as a compatibility entrypoint for older install snippets, but new Claude installs should fetch `claude/BOOTSTRAP.md` directly.
 
@@ -57,10 +55,7 @@ When done, you'll have a set of "Elephant/Goldfish" Codex skills. Start typing:
 $eg...
 ```
 
-You should see the list of all e/g skills:
-
-<img width="791" height="383" alt="Screenshot 2026-05-05 at 3 13 57 PM" src="https://github.com/user-attachments/assets/81706de4-3da2-496f-88b4-f5f836f8f535" />
-
+You should see the list of all e/g skills.
 
 ### Gemini CLI (beta)
 
@@ -84,9 +79,7 @@ Then start typing:
 /eg...
 ```
 
-You should see the list of all e/g skills:
-
-<img width="960" height="283" alt="Screenshot 2026-05-05 at 3 11 26 PM" src="https://github.com/user-attachments/assets/eaf80bf9-eb35-4ed9-a869-1d434659f0e5" />
+You should see the list of all e/g skills.
 
 ---
 
