@@ -22,13 +22,6 @@ The price is the higher token consumption and longer irrational work. Be warned.
 
 <img width="640" height="320" alt="ClaudeFlow-logo" src="https://github.com/user-attachments/assets/caf5b20a-92a5-468f-b03a-6d20257cf4e1" />
 
-➡️ NEW: [ClaudeFlow](https://github.com/omniprag/claudeflows)
-
-**ClaudeFlow** is a set of Claude Code skills installed as a plugin. It's a more formal and extended version of the pattern with more commands and optional deeper thinking mode. MIT license, updates via the Claude Plugin Marketplace.
-
-
-Adaptive install is available too.
-
 In your target repo, open a Claude Code session and paste this message:
 
 ```
