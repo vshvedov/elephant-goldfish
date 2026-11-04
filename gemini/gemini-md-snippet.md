@@ -1,31 +1,20 @@
-# Snippet to inject into target GEMINI.md
+## Working with Gemini CLI (elephant/goldfish)
 
-This is the section that gets added to the target repo's `GEMINI.md` during bootstrap. Tailor the placeholders, then inject. Do not include this header line or the surrounding text — only what's between the `<<<SNIPPET_START>>>` and `<<<SNIPPET_END>>>` markers.
+Use these workflows when explicitly requested. Don't start another workflow for
+follow-ups inside work already in progress. Trivial questions and edits need no
+multi-agent ceremony. Skills live in `.gemini/skills`.
 
-```
-<<<SNIPPET_START>>>
-## Working with Gemini CLI (Elephant/Goldfish Skills)
+| Workflow | Use it for |
+|---|---|
+| `eg-question` | A short answer grounded in code or sources. Read-only. |
+| `eg-brainstorm` | Different approaches to a rough idea. |
+| `eg-prd` | Requirements, open questions and optional session-sized tasks. |
+| `eg-new-feature` | Design, fresh reviews, implementation and checks. |
+| `eg-fix-bug` | Independent diagnosis, a failing regression test and a fix. |
+| `eg-precommit-review` | An independent review of staged, unstaged and untracked changes. |
 
-This project has installed five [Gemini CLI Skills](https://github.com/google/gemini-cli) in `.gemini/skills/` that wrap an "elephant/goldfish" workflow inspired by [this article](https://drensin.medium.com/elephants-goldfish-and-the-new-golden-age-of-software-engineering-c33641a48874): the "elephant" is the working session with full context; the "goldfish" is a fresh subagent spawned via `invoke_agent` with no prior context.
-
-For implementation work, the goldfish stress-tests a problem/design doc or a diff. For brainstorming and PRD writing, multiple goldfish run in parallel with different lenses to generate divergent ideas or research findings the elephant synthesizes.
-
-These are activated contextually based on your intent, but you can explicitly trigger them by naming the skill:
-
-| Intent | Skill Trigger | Description |
-|---|---|---|
-| Early-stage concept design | "Let's run `eg-brainstorm` for <rough idea>" | Multiple goldfish in parallel generate divergent ideas. All questions via `ask_user`. Hands off to `eg-prd` or `eg-new-feature`. |
-| Product Requirements Doc | "Let's write an `eg-prd` for <feature>" | Codebase grounding → structured gap-filling → deep research with parallel goldfish → synthesized PRD. Saves to `[BOOTSTRAP: prd path, e.g. `docs/prds/`]`. |
-| Bug fix flow | "Run `eg-fix-bug` for <description \| #issue>" | Bug fix flow: problem doc → goldfish diagnosis check → failing test → fix → `eg-precommit-review` → test gate. |
-| Feature flow | "Run `eg-new-feature` for <description>" | Feature flow: scope confirm → design doc → three-goldfish design check (comprehension + critic + readiness) → implement → `eg-precommit-review` → test gate. [BOOTSTRAP: one-line summary of stack-specific design rubric items.] |
-| Independent review | "Run `eg-precommit-review`" | Local independent-review loop on the pending diff ([BOOTSTRAP: pre-flight summary]). |
-
-You provide a brief instruction; Gemini writes the doc back at you. Examples:
-
-> Let's do an `eg-brainstorm` for [BOOTSTRAP: a short, realistic raw idea for this project]
-> Please run the `eg-new-feature` flow for [BOOTSTRAP: a short, realistic feature description for this project]
-> Time for an `eg-precommit-review`
-
-Each skill workflow stops short of committing. Authorize the commit explicitly when ready. [BOOTSTRAP: commit-policy reminder if the project has one]
-<<<SNIPPET_END>>>
-```
+The main session keeps context. Fresh reviewers receive only the evidence for
+their task, with no implementation conversation. Missing dispatch or evidence
+means incomplete, not a clean review. Check actual host capabilities before use.
+Ask concise questions only for missing information or consequential choices.
+Respect existing authorization; never stage, commit or push without it.

@@ -1,41 +1,17 @@
-# Elephant/Goldfish Maintenance Prompts
+# Updating an installed harness
 
-Use these prompts to keep your repository in sync with the upstream elephant/goldfish patterns or to propagate changes across different AI adapters.
+Paste this into the agent you use inside your project:
 
-## For Users: Updating a Target Repo
-If you have already bootstrapped a repository and want to pull in the latest logic from the upstream `elephant-goldfish` repo while preserving your local stack configuration (test commands, URLs, etc.), provide this prompt to your AI agent:
-
-```markdown
-# Update Elephant/Goldfish Patterns
-There is an update available for the elephant/goldfish workflow. Please sync this repository with the upstream templates while preserving my local stack adaptations:
-
-1. **Fetch Upstream:** Go to https://github.com/vshvedov/elephant-goldfish.
-2. **Identify Adapter:** Identify which agent I am (Claude Code, Gemini CLI, Codex, or Cursor) and read the corresponding `BOOTSTRAP.md` in the upstream repo.
-3. **Compare & Merge:**
-   - Read my local command/skill files. Claude uses `.claude/commands/`; Gemini uses `.gemini/skills/`; Codex uses shared user skills in `${CODEX_HOME:-~/.codex}/skills/eg-*`; Cursor uses `.cursor/skills/eg-*`.
-   - For Claude/Gemini/Cursor, identify the stack-specific values I previously filled in (commands for linting, testing, dev URLs, etc.).
-   - Fetch the NEW templates from upstream and merge the new logic/steps into my local files.
-   - **Constraint:** For Claude/Gemini/Cursor, do NOT revert my concrete stack commands back to `[BOOTSTRAP]` markers; keep the local implementations. For Codex, keep the shared skills project-agnostic so they inspect the current repo at runtime.
-4. **Update Snippet:** Update the `CLAUDE.md`, `GEMINI.md`, or `AGENTS.md` snippet if the upstream version has improved. (Cursor reads both `AGENTS.md` and `CLAUDE.md`.)
-5. **Report:** Summarize what new features or logic steps were added and confirm that local test/lint commands were preserved.
+```text
+Update my elephant/goldfish workflows from https://github.com/vshvedov/elephant-goldfish.
+Read the BOOTSTRAP.md for this agent (claude, codex, gemini, cursor or grok).
+Fetch one pinned revision into staging, compare it with my installed skills and
+preserve my local commands and custom workflow steps. Show conflicts before
+replacing anything. Leave other agents' files alone. Verify all six workflows,
+including eg-question, and report what changed. Do not commit.
 ```
 
----
-
-## For Maintainers: Syncing Adapters
-If you have improved a template for one AI (e.g., Claude) and want to propagate that logic to the others (Gemini, Codex) within this repository, use this prompt:
-
-```markdown
-# Propagate Pattern Update
-I have updated the core elephant/goldfish pattern in one of the adapters. Please propagate these changes across the entire repo:
-
-1. **Analyze:** Look at the recent changes in `claude/commands/`, `gemini/commands/`, `codex/skills/`, or `cursor/skills/`.
-2. **Propagate:** Apply the same logical updates (e.g., adding a new step, refining the goldfish prompt) to the other adapters.
-3. **Adapt Syntax:** Ensure you respect the target platform's specific syntax:
-   - **Claude:** Uses `Agent` tool and `.claude/commands/` format.
-   - **Gemini:** Uses `invoke_agent` tool and `.gemini/skills/` format.
-   - **Codex:** Uses `SKILL.md` format and `$eg-` skill mention syntax.
-   - **Cursor:** Uses `SKILL.md` format with `disable-model-invocation: true`, the `Task` tool (with `subagent_type: "explore"` or `"generalPurpose"`), the `AskQuestion` tool for structured questions, and `.cursor/skills/` as the install path. Skills surface as `/eg-*` slash commands.
-4. **Update Snippets:** Ensure the `snippet.md`, `gemini-md-snippet.md`, or `agents-md-snippet.md` files (under `claude/`, `gemini/`, `codex/`, and `cursor/`) are updated if the command descriptions changed.
-5. **Verify:** Confirm all `BOOTSTRAP.md` files still point to the correct updated paths.
-```
+For maintainers: keep the six workflows consistent across adapters while preserving
+native dispatch, invocation syntax and install locations. Run the checks described
+in [testing](docs/testing.md) before publishing. Bootstrap procedures must fetch
+all referenced files and preserve local edits even when a download fails.

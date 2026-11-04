@@ -1,31 +1,13 @@
-# BOOTSTRAP.md
+# Setup
 
-Compatibility entrypoint for agent-specific bootstraps.
+Choose the adapter for the agent running in your target repository:
 
-This repo now keeps agent-specific adapters under `claude/`, `codex/`, `gemini/`, and `cursor/`. Existing install snippets may still fetch this root file, so do not treat it as the full procedure.
+- [Claude Code](claude/BOOTSTRAP.md)
+- [Codex](codex/BOOTSTRAP.md)
+- [Gemini CLI](gemini/BOOTSTRAP.md)
+- [Cursor](cursor/BOOTSTRAP.md)
+- [Grok Build](grok/BOOTSTRAP.md)
 
-If you are running in Claude Code, fetch the Claude bootstrap procedure with:
-
-```sh
-gh api repos/vshvedov/elephant-goldfish/contents/claude/BOOTSTRAP.md -H 'Accept: application/vnd.github.raw'
-```
-
-Then follow that procedure to set up the Claude Code elephant/goldfish workflow.
-
-If you are running in Codex, do not install the Claude adapter from this root file. Fetch the Codex bootstrap procedure with:
-
-```sh
-gh api repos/vshvedov/elephant-goldfish/contents/codex/BOOTSTRAP.md -H 'Accept: application/vnd.github.raw'
-```
-
-For Gemini CLI, fetch:
-
-```sh
-gh api repos/vshvedov/elephant-goldfish/contents/gemini/BOOTSTRAP.md -H 'Accept: application/vnd.github.raw'
-```
-
-For Cursor, fetch:
-
-```sh
-gh api repos/vshvedov/elephant-goldfish/contents/cursor/BOOTSTRAP.md -H 'Accept: application/vnd.github.raw'
-```
+Older install snippets may fetch this file. Fetch and follow the selected procedure
+with `gh api repos/vshvedov/elephant-goldfish/contents/<adapter>/BOOTSTRAP.md -H 'Accept: application/vnd.github.raw'`.
+Preserve any existing setup for other agents.

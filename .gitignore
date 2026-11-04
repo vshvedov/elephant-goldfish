@@ -7,3 +7,6 @@ node_modules/
 *.log
 .vscode/
 .brainstorms/
+__pycache__/
+.venv/
+.elephant-goldfish/tmp/

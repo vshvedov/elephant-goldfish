@@ -1,0 +1,4 @@
+interface:
+  display_name: "Elephant/Goldfish Question"
+  short_description: "Answer a question with fresh readers and citations"
+  default_prompt: "Use $eg-question to explain:"
