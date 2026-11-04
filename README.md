@@ -1,8 +1,8 @@
-# Elephant/Goldfish (Claude Code, Codex, Gemini CLI)
+# Elephant/Goldfish (Claude Code, Codex, Gemini CLI, Cursor)
 
 <img width="960" height="540" alt="1_kppt5IZmL1DRzrQub3DPyQ" src="https://github.com/user-attachments/assets/93e98eac-31c7-420b-8169-867a6c95f389" />
 
-A reusable workflow for software work with Claude Code, Codex, and Gemini CLI, built around the elephant/goldfish pattern from [Dave Rensin's article](https://drensin.medium.com/elephants-goldfish-and-the-new-golden-age-of-software-engineering-c33641a48874).
+A reusable workflow for software work with Claude Code, Codex, Gemini CLI, and Cursor, built around the elephant/goldfish pattern from [Dave Rensin's article](https://drensin.medium.com/elephants-goldfish-and-the-new-golden-age-of-software-engineering-c33641a48874).
 
 ---
 
@@ -81,15 +81,33 @@ Then start typing:
 
 You should see the list of all e/g skills.
 
+### Cursor (beta)
+
+In your target repo, open a Cursor Agent chat and paste this message:
+
+```
+Fetch the Cursor elephant-goldfish bootstrap procedure with
+`gh api repos/vshvedov/elephant-goldfish/contents/cursor/BOOTSTRAP.md -H 'Accept: application/vnd.github.raw'`,
+then follow the procedure to set up the Cursor elephant/goldfish workflow here, preserving any existing setups for other AIs.
+```
+
+When done, you'll have a set of "Elephant/Goldfish" Cursor skills under `.cursor/skills/`. Cursor auto-discovers them — no install command needed. Start a fresh Agent chat and type:
+
+```
+/eg...
+```
+
+You should see the list of all `eg-` skills.
+
 ---
 
-*The installs are additive. Claude Code gets project-local `.claude/commands/` and `CLAUDE.md`; Codex gets shared user skills installed directly into `${CODEX_HOME:-~/.codex}/skills/`; Gemini CLI gets local workspace Skills in `.gemini/skills/` plus `GEMINI.md`. They can live side by side and should mirror the same workflow conventions.*
+*The installs are additive. Claude Code gets project-local `.claude/commands/` and `CLAUDE.md`; Codex gets shared user skills installed directly into `${CODEX_HOME:-~/.codex}/skills/`; Gemini CLI gets local workspace Skills in `.gemini/skills/` plus `GEMINI.md`; Cursor gets project-local `.cursor/skills/` plus `AGENTS.md`. They can live side by side and should mirror the same workflow conventions.*
 
 ---
 
 ## Adaptive Injection
 
-For Claude Code and Gemini CLI, this repository uses **Adaptive Injection**. When you bootstrap a repository:
+For Claude Code, Gemini CLI, and Cursor, this repository uses **Adaptive Injection**. When you bootstrap a repository:
 1. The AI analyzes your **local stack** (languages, frameworks, test runners).
 2. It fetches **generic templates** from this repo.
 3. It **contextualizes** those templates, replacing `[BOOTSTRAP: ...]` markers with your actual project commands.
@@ -100,7 +118,7 @@ Codex is different: the `eg-*` workflows are shared user skills installed once i
 
 ## Keeping Up to Date
 
-Since Claude/Gemini local commands are customized, you can't simply overwrite them when this repository updates. To sync the latest logic while preserving your local configuration:
+Since Claude/Gemini/Cursor local commands are customized, you can't simply overwrite them when this repository updates. To sync the latest logic while preserving your local configuration:
 
 1. Open [PROMPTS.md](./PROMPTS.md).
 2. Copy the **"Update Elephant/Goldfish Patterns"** prompt.
@@ -114,15 +132,15 @@ The AI will fetch the latest templates, identify your local adaptations, and per
 
 Five workflow commands/skills for each agent:
 
-| Stage | Claude Code | Codex | Gemini CLI |
-|---|---|---|---|
-| Brainstorm | `/eg-brainstorm` | `Use $eg-brainstorm ...` | `eg-brainstorm` Skill |
-| PRD | `/eg-prd` | `Use $eg-prd ...` | `eg-prd` Skill |
-| Bug fix | `/eg-fix-bug` | `Use $eg-fix-bug ...` | `eg-fix-bug` Skill |
-| New feature | `/eg-new-feature` | `Use $eg-new-feature ...` | `eg-new-feature` Skill |
-| Precommit review | `/eg-precommit-review` | `Use $eg-precommit-review ...` | `eg-precommit-review` Skill |
+| Stage | Claude Code | Codex | Gemini CLI | Cursor |
+|---|---|---|---|---|
+| Brainstorm | `/eg-brainstorm` | `Use $eg-brainstorm ...` | `eg-brainstorm` Skill | `/eg-brainstorm` |
+| PRD | `/eg-prd` | `Use $eg-prd ...` | `eg-prd` Skill | `/eg-prd` |
+| Bug fix | `/eg-fix-bug` | `Use $eg-fix-bug ...` | `eg-fix-bug` Skill | `/eg-fix-bug` |
+| New feature | `/eg-new-feature` | `Use $eg-new-feature ...` | `eg-new-feature` Skill | `/eg-new-feature` |
+| Precommit review | `/eg-precommit-review` | `Use $eg-precommit-review ...` | `eg-precommit-review` Skill | `/eg-precommit-review` |
 
-Claude and Gemini bootstraps inspect the target stack and customize local templates for the detected language, test tiers, browser/simulator validation path, project-specific review gotchas, and commit convention. Codex installs shared skills once; those skills inspect the current repo at runtime. See [Bootstrap a new repo](#bootstrap-a-new-repo) below for the full procedure.
+Claude, Gemini, and Cursor bootstraps inspect the target stack and customize local templates for the detected language, test tiers, browser/simulator validation path, project-specific review gotchas, and commit convention. Codex installs shared skills once; those skills inspect the current repo at runtime. See [Bootstrap a new repo](#bootstrap-a-new-repo) below for the full procedure.
 
 ---
 
@@ -183,17 +201,19 @@ You don't have to start at the top. Pick the stage that matches what you have:
 
 ## Commands And Skills
 
-| Intent | Claude Code | Codex | Gemini CLI |
-|---|---|---|---|
-| Early-stage concept design | `/eg-brainstorm <rough idea>` | `Use $eg-brainstorm to brainstorm <rough idea>` | Invoke `eg-brainstorm` skill |
-| PRD from idea / feature / issue | `/eg-prd <idea \| feature \| #issue>` | `Use $eg-prd to write a PRD for <idea \| feature \| #issue>` | Invoke `eg-prd` skill |
-| Bug fix flow | `/eg-fix-bug <description \| #issue \| URL>` | `Use $eg-fix-bug to fix <description \| #issue \| URL>` | Invoke `eg-fix-bug` skill |
-| Feature flow | `/eg-new-feature <description \| #issue \| URL>` | `Use $eg-new-feature to build <description \| #issue \| URL>` | Invoke `eg-new-feature` skill |
-| Independent diff review | `/eg-precommit-review` | `Use $eg-precommit-review to review my pending changes` | Invoke `eg-precommit-review` skill |
+| Intent | Claude Code | Codex | Gemini CLI | Cursor |
+|---|---|---|---|---|
+| Early-stage concept design | `/eg-brainstorm <rough idea>` | `Use $eg-brainstorm to brainstorm <rough idea>` | Invoke `eg-brainstorm` skill | `/eg-brainstorm <rough idea>` |
+| PRD from idea / feature / issue | `/eg-prd <idea \| feature \| #issue>` | `Use $eg-prd to write a PRD for <idea \| feature \| #issue>` | Invoke `eg-prd` skill | `/eg-prd <idea \| feature \| #issue>` |
+| Bug fix flow | `/eg-fix-bug <description \| #issue \| URL>` | `Use $eg-fix-bug to fix <description \| #issue \| URL>` | Invoke `eg-fix-bug` skill | `/eg-fix-bug <description \| #issue \| URL>` |
+| Feature flow | `/eg-new-feature <description \| #issue \| URL>` | `Use $eg-new-feature to build <description \| #issue \| URL>` | Invoke `eg-new-feature` skill | `/eg-new-feature <description \| #issue \| URL>` |
+| Independent diff review | `/eg-precommit-review` | `Use $eg-precommit-review to review my pending changes` | Invoke `eg-precommit-review` skill | `/eg-precommit-review` |
 
 Implementation flows (`eg-fix-bug`, `eg-new-feature`) stop short of committing. The user authorizes the commit explicitly when ready.
 
 Codex note: current Codex builds do not support project-defined custom slash commands, so `/eg-*` and `/elephant-goldfish-codex:eg-*` are not expected to appear in the slash-command menu. Use `$eg-*` skill mentions instead.
+
+Cursor note: skills under `.cursor/skills/` are auto-discovered, and the bootstrapped skills set `disable-model-invocation: true` so they behave as explicit slash commands — type `/eg-` in Agent chat to surface them. A fresh Agent chat may be required after bootstrap for the new skills to appear in the slash menu.
 
 You give a one-liner; the agent writes the doc back at you. **You don't author docs by hand.** Most docs live in chat. They land on disk only when there's a future-you reason to keep them — a substantial feature, a new subsystem, a saved brainstorm brief, a PRD that will be revisited.
 
@@ -490,7 +510,16 @@ After you give Gemini CLI the `gh api` instruction, it will:
 6. Inject the "Working with Gemini CLI" snippet into `GEMINI.md`.
 7. Print a summary and remind you to run `/skills reload` to activate them.
 
-All bootstraps explicitly preserve other agents' existing files. Codex does not create project-local plugin or marketplace files.
+After you give Cursor the `gh api` instruction, it will:
+
+1. Read [cursor/BOOTSTRAP.md](cursor/BOOTSTRAP.md) for the procedure.
+2. Inspect the target repo's stack (including any existing `AGENTS.md`, `CLAUDE.md`, or `.cursor/rules/`).
+3. Customize the Cursor SKILL templates in [cursor/skills/](cursor/skills/).
+4. Create skill folders under `<target>/.cursor/skills/eg-*/SKILL.md`. Cursor auto-discovers them — no install command needed.
+5. Inject the "Working with Cursor (elephant/goldfish skills)" snippet into `AGENTS.md` (or note that an existing `CLAUDE.md` already carries the snippet, since Cursor reads both).
+6. Print a summary and remind you that a fresh Agent chat may be needed for the `/eg-*` slash commands to surface.
+
+All bootstraps explicitly preserve other agents' existing files. Codex does not create project-local plugin or marketplace files. The Cursor bootstrap does not create a `.cursor/rules/*.mdc` rule — skills self-describe via their YAML frontmatter, which avoids consuming context on every turn.
 
 ---
 
@@ -500,8 +529,8 @@ Some projects need a stack-specific verb the generic workflows don't cover — f
 
 Pattern:
 
-1. Copy `eg-new-feature.md` from the relevant target adapter as the starting shape: `.claude/commands/` for Claude Code, `${CODEX_HOME:-~/.codex}/skills/eg-new-feature/SKILL.md` for Codex, or `.gemini/skills/` for Gemini CLI.
-2. Tailor: replace the design rubric with the project-specific recipe (the architectural invariants, the canonical "how to add one of these" steps from `CLAUDE.md` / `AGENTS.md` / `GEMINI.md`, the verification path).
+1. Copy `eg-new-feature.md` from the relevant target adapter as the starting shape: `.claude/commands/` for Claude Code, `${CODEX_HOME:-~/.codex}/skills/eg-new-feature/SKILL.md` for Codex, `.gemini/skills/` for Gemini CLI, or `.cursor/skills/eg-new-feature/SKILL.md` for Cursor.
+2. Tailor: replace the design rubric with the project-specific recipe (the architectural invariants, the canonical "how to add one of these" steps from `CLAUDE.md` / `AGENTS.md` / `GEMINI.md` — Cursor reads `AGENTS.md` and `CLAUDE.md` automatically — and the verification path).
 3. Add a `Routing` note at the top of the generic new-feature command or skill so users and agents know when to switch.
 
 Use the `eg-` prefix for any project-specific command or skill — keeps the namespace consistent so the elephant/goldfish set is grep-able and won't collide with generic verbs like `/prd` or `/research`.
