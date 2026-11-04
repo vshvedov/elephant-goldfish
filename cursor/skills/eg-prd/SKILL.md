@@ -84,9 +84,12 @@ For every gap category the user selected, use `AskQuestion` to present the speci
 
 If the user picks **Defer**, write that gap into the PRD's Open Questions verbatim.
 
-## Step 4: Deep research (if Q2 was not "None")
+## Step 4: Research at the selected depth
 
-Spawn **3-5 research goldfish in parallel** using the `Task` tool (`subagent_type: "generalPurpose"`). Execute all calls concurrently in a single message.
+If Q2 is "None" or Q1 is "Lightweight", skip this step and use the codebase brief.
+For "Standard", use one focused research agent covering only unresolved questions.
+For "Comprehensive", spawn 3-5 research agents with distinct lenses in parallel.
+Use the `Task` tool (`subagent_type: "generalPurpose"`); execute parallel calls in one message.
 
 Default lens kit (mix and match):
 - **Market & prior art** 

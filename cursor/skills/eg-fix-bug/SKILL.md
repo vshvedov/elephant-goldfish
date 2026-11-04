@@ -16,7 +16,7 @@ The only opt-out: if the user, in the same turn that invoked this skill, explici
 
 ## Step 0: Triviality gate
 
-**Skip the goldfish/test ceremony for:** typo fixes in copy or comments, dead-code removal, version bumps, formatter-only diffs, single-line config tweaks. Go straight to Step 5 (`/eg-precommit-review`) and the test gate.
+**Skip the goldfish/test ceremony for:** typo fixes in copy or comments, dead-code removal, version bumps, formatter-only diffs, single-line config tweaks. Apply the requested trivial edit first. Then go to Step 5 (`/eg-precommit-review`) and the test gate; skip only the diagnosis and failing-test ceremony.
 
 **Run the full loop for everything else,** including small one-line code fixes — small diffs hide bugs disproportionately well.
 

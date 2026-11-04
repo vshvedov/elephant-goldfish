@@ -16,6 +16,11 @@ Run the pre-commit review loop. The goal: validate the pending changes locally b
 
 Execute these using the `Shell` tool. Run each command separately so a failure in one does not skip the others.
 
+[BOOTSTRAP: code-generation block — keep only if the stack requires codegen before tests (build_runner, protoc, prisma generate, etc.).]
+```sh
+[BOOTSTRAP: codegen command]
+```
+
 ```sh
 [BOOTSTRAP: lint command]
 ```
@@ -34,11 +39,6 @@ Execute these using the `Shell` tool. Run each command separately so a failure i
 [BOOTSTRAP: e2e test block — keep if the stack has an E2E suite; remove otherwise.]
 ```sh
 [BOOTSTRAP: e2e test command]
-```
-
-[BOOTSTRAP: code-generation block — keep only if the stack requires codegen before tests (build_runner, protoc, prisma generate, etc.).]
-```sh
-[BOOTSTRAP: codegen command]
 ```
 
 ## Step 2: Spawn a fresh independent reviewer
